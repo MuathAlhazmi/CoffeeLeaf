@@ -1,2 +1,2 @@
 # CoffeeLeaf
-check commit description
+check commit 'init' description
