@@ -1,0 +1,48 @@
+{
+  "project_info": {
+    "project_number": "97109490521",
+    "firebase_url": "https://jazansocial.firebaseio.com",
+    "project_id": "jazansocial",
+    "storage_bucket": "jazansocial.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:97109490521:android:0e8882521c2d07e91baa48",
+        "android_client_info": {
+          "package_name": "com.restraunt.muath"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "97109490521-flq2ga229l7a2vbpguep1a71gf8a7cf8.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.restraunt.muath",
+            "certificate_hash": "73c452a080344023d373fc5856e8f4e49c846f8b"
+          }
+        },
+        {
+          "client_id": "97109490521-onlukpcs2tvsndbj9s1gt0c41uh67mgq.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDP4Y62zBo5PVG5BUmrO9qPBOZF8HKKFS0"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "97109490521-onlukpcs2tvsndbj9s1gt0c41uh67mgq.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
