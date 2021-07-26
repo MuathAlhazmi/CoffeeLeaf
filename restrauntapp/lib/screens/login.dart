@@ -589,7 +589,7 @@ class _OTPScreenState extends State<OTPScreen> {
     border: Border.all(color: mainColor),
   );
   late Timer _timer;
-  int _start = 120;
+  int _start = 60;
 
   void startTimer() {
     const oneSec = const Duration(seconds: 1);

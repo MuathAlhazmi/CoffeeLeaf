@@ -322,8 +322,8 @@ class _DetailScreenState extends State<DetailScreen> {
                             final sum = snapshot.data!.docs
                                 .map((doc) => doc['star'])
                                 .toList();
-                            var average = sum.reduce(
-                                (a, b) => a + b / snapshot.data!.docs.length);
+                            var average = sum.reduce((a, b) => a + b) /
+                                snapshot.data!.docs.length;
                             return Container(
                               padding: EdgeInsets.symmetric(
                                   horizontal: 20, vertical: 10),
@@ -963,24 +963,21 @@ class _DetailScreenState extends State<DetailScreen> {
                                                 MainAxisAlignment.spaceAround,
                                             children: [
                                               Expanded(
-                                                  child: Hero(
-                                                tag: displayItems[index].name,
-                                                child: CachedNetworkImage(
-                                                  imageUrl:
-                                                      displayItems[index].image,
-                                                  progressIndicatorBuilder: (context,
-                                                          url,
-                                                          downloadProgress) =>
-                                                      CupertinoActivityIndicator(
-                                                          radius: 10),
-                                                  errorWidget:
-                                                      (context, url, error) =>
-                                                          Icon(
-                                                    Icons.error,
-                                                    color: Colors.white,
-                                                  ),
-                                                  fit: BoxFit.cover,
+                                                  child: CachedNetworkImage(
+                                                imageUrl:
+                                                    displayItems[index].image,
+                                                progressIndicatorBuilder: (context,
+                                                        url,
+                                                        downloadProgress) =>
+                                                    CupertinoActivityIndicator(
+                                                        radius: 10),
+                                                errorWidget:
+                                                    (context, url, error) =>
+                                                        Icon(
+                                                  Icons.error,
+                                                  color: Colors.white,
                                                 ),
+                                                fit: BoxFit.cover,
                                               )),
                                               Text(
                                                 displayItems[index].name,
