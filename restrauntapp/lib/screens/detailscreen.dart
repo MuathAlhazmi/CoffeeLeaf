@@ -1,8 +1,11 @@
 import 'dart:ui';
 
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 import 'package:flutter_staggered_animations/flutter_staggered_animations.dart';
 import 'package:restrauntapp/constants/constants.dart';
 import 'package:restrauntapp/data/data.dart';
@@ -11,14 +14,16 @@ import 'package:restrauntapp/screens/cart.dart';
 import 'package:restrauntapp/widgets/snackbar.dart';
 
 class DetailScreen extends StatefulWidget {
-  final String? description;
+  final String description;
   final String name;
   final String image;
+  final String itemID;
   final num price;
   int quantity;
   DetailScreen(
       {required this.image,
-      this.description,
+      required this.itemID,
+      required this.description,
       required this.name,
       required this.quantity,
       required this.price});
@@ -28,6 +33,8 @@ class DetailScreen extends StatefulWidget {
 }
 
 class _DetailScreenState extends State<DetailScreen> {
+  final TextEditingController review = TextEditingController();
+  int star = 0;
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -148,6 +155,8 @@ class _DetailScreenState extends State<DetailScreen> {
                           Colors.white);
                       setState(() {
                         cart.add(Item(
+                            itemID: widget.itemID,
+                            description: widget.description,
                             image: widget.image,
                             name: widget.name,
                             quantity: widget.quantity,
@@ -298,6 +307,70 @@ class _DetailScreenState extends State<DetailScreen> {
                   Divider(
                     color: Colors.transparent,
                   ),
+                  StreamBuilder(
+                      stream: FirebaseFirestore.instance
+                          .collection('reviews')
+                          .where(
+                            'itemName',
+                            isEqualTo: widget.itemID,
+                          )
+                          .snapshots(),
+                      builder:
+                          (context, AsyncSnapshot<QuerySnapshot> snapshot) {
+                        if (snapshot.hasData) {
+                          if (!snapshot.data!.docs.isEmpty) {
+                            final sum = snapshot.data!.docs
+                                .map((doc) => doc['star'])
+                                .toList();
+                            var average = sum.reduce(
+                                (a, b) => a + b / snapshot.data!.docs.length);
+                            return Container(
+                              padding: EdgeInsets.symmetric(
+                                  horizontal: 20, vertical: 10),
+                              decoration: BoxDecoration(
+                                color: mainColor,
+                                borderRadius: BorderRadius.circular(10),
+                              ),
+                              child: Row(
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceEvenly,
+                                children: [
+                                  Text(
+                                    average.toString(),
+                                    style: TextStyle(
+                                        color: itemColor,
+                                        fontSize: 20,
+                                        fontWeight: FontWeight.bold),
+                                  ),
+                                  Directionality(
+                                    textDirection: TextDirection.ltr,
+                                    child: RatingBar(
+                                        initialRating: average.toDouble(),
+                                        ignoreGestures: true,
+                                        glowColor: mainColor,
+                                        ratingWidget: RatingWidget(
+                                          empty: Icon(Icons.star_border,
+                                              color: itemColor),
+                                          half: Icon(Icons.star_half,
+                                              color: itemColor),
+                                          full: Icon(Icons.star,
+                                              color: itemColor),
+                                        ),
+                                        onRatingUpdate: (rating) {}),
+                                  ),
+                                ],
+                              ),
+                            );
+                          } else {
+                            return Container();
+                          }
+                        } else {
+                          return CupertinoActivityIndicator();
+                        }
+                      }),
+                  Divider(
+                    color: Colors.transparent,
+                  ),
                   Material(
                     elevation: 10,
                     borderRadius: BorderRadius.circular(10),
@@ -309,13 +382,512 @@ class _DetailScreenState extends State<DetailScreen> {
                         borderRadius: BorderRadius.circular(10),
                       ),
                       child: Text(
-                        widget.description ?? '',
+                        widget.description,
                         style: TextStyle(
                           color: itemColor,
                         ),
                       ),
                     ),
                   ),
+                  Divider(
+                    color: Colors.transparent,
+                    height: 30,
+                  ),
+                  Row(
+                    children: [
+                      Expanded(
+                        child: GestureDetector(
+                          onTap: () async {
+                            bool docexists = await FirebaseFirestore.instance
+                                .collection('reviews')
+                                .doc(FirebaseAuth.instance.currentUser!.uid +
+                                    widget.itemID)
+                                .get()
+                                .then((value) => value.exists);
+                            if (docexists) {
+                              showDialog(
+                                context: context,
+                                builder: (context) => Dialog(
+                                  insetPadding: EdgeInsets.all(20),
+                                  shape: RoundedRectangleBorder(
+                                    borderRadius: BorderRadius.circular(15),
+                                  ),
+                                  elevation: 0,
+                                  backgroundColor: Colors.transparent,
+                                  child: Material(
+                                    color: Colors.transparent,
+                                    shadowColor: mainColor,
+                                    elevation: 20,
+                                    child: BackdropFilter(
+                                      filter: ImageFilter.blur(
+                                          sigmaX: 10, sigmaY: 10),
+                                      child: ClipRRect(
+                                        borderRadius: BorderRadius.circular(20),
+                                        child: Container(
+                                          height: 300,
+                                          padding: EdgeInsets.symmetric(
+                                              horizontal: 20, vertical: 30),
+                                          decoration: BoxDecoration(
+                                              shape: BoxShape.rectangle,
+                                              color: mainColor,
+                                              borderRadius:
+                                                  BorderRadius.circular(20)),
+                                          child: Column(
+                                              mainAxisAlignment:
+                                                  MainAxisAlignment.spaceAround,
+                                              children: [
+                                                Column(
+                                                  children: [
+                                                    Text(
+                                                      'هل اتت متأكد؟',
+                                                      style: TextStyle(
+                                                          color: itemColor,
+                                                          fontWeight:
+                                                              FontWeight.bold),
+                                                    ),
+                                                    Divider(
+                                                      color: Colors.transparent,
+                                                    ),
+                                                    Text(
+                                                      'هل تريد حذق تقييمك السابق؟',
+                                                      style: TextStyle(
+                                                        color: itemColor,
+                                                      ),
+                                                    ),
+                                                  ],
+                                                ),
+                                                Divider(
+                                                  color: Colors.transparent,
+                                                ),
+                                                Row(
+                                                    mainAxisAlignment:
+                                                        MainAxisAlignment
+                                                            .spaceEvenly,
+                                                    children: [
+                                                      GestureDetector(
+                                                        onTap: () {
+                                                          Navigator.pop(
+                                                              context);
+                                                        },
+                                                        child: Container(
+                                                          padding: EdgeInsets
+                                                              .symmetric(
+                                                                  horizontal:
+                                                                      20,
+                                                                  vertical: 5),
+                                                          decoration:
+                                                              BoxDecoration(
+                                                            color: mainColor,
+                                                            borderRadius:
+                                                                BorderRadius
+                                                                    .circular(
+                                                                        10),
+                                                          ),
+                                                          child: Center(
+                                                            child: Text(
+                                                              'ألغاء',
+                                                              style: TextStyle(
+                                                                color:
+                                                                    itemColor,
+                                                              ),
+                                                            ),
+                                                          ),
+                                                        ),
+                                                      ),
+                                                      GestureDetector(
+                                                        onTap: () async {
+                                                          await FirebaseFirestore
+                                                              .instance
+                                                              .collection(
+                                                                  'reviews')
+                                                              .doc(FirebaseAuth
+                                                                      .instance
+                                                                      .currentUser!
+                                                                      .uid +
+                                                                  widget.itemID)
+                                                              .delete();
+                                                          Navigator.pop(
+                                                              context);
+                                                          showModalBottomSheet(
+                                                              isScrollControlled:
+                                                                  true,
+                                                              context: context,
+                                                              elevation: 100,
+                                                              builder:
+                                                                  (context) {
+                                                                return Padding(
+                                                                  padding: EdgeInsets.symmetric(
+                                                                      vertical:
+                                                                          30,
+                                                                      horizontal:
+                                                                          20),
+                                                                  child:
+                                                                      Container(
+                                                                    child:
+                                                                        SingleChildScrollView(
+                                                                      child:
+                                                                          Padding(
+                                                                        padding:
+                                                                            MediaQuery.of(context).viewInsets,
+                                                                        child:
+                                                                            Column(
+                                                                          mainAxisSize:
+                                                                              MainAxisSize.min,
+                                                                          children: [
+                                                                            Directionality(
+                                                                              textDirection: TextDirection.ltr,
+                                                                              child: RatingBar(
+                                                                                  initialRating: star.toDouble(),
+                                                                                  glowColor: mainColor,
+                                                                                  ratingWidget: RatingWidget(
+                                                                                    empty: Icon(Icons.star_border, color: mainColor),
+                                                                                    half: Icon(Icons.star_half, color: mainColor),
+                                                                                    full: Icon(Icons.star, color: mainColor),
+                                                                                  ),
+                                                                                  onRatingUpdate: (rating) {
+                                                                                    setState(() {
+                                                                                      star = rating.toInt();
+                                                                                    });
+                                                                                  }),
+                                                                            ),
+                                                                            Divider(
+                                                                              color: Colors.transparent,
+                                                                            ),
+                                                                            Container(
+                                                                              decoration: BoxDecoration(
+                                                                                borderRadius: BorderRadius.circular(10),
+                                                                                color: CupertinoColors.tertiarySystemFill,
+                                                                              ),
+                                                                              child: TextField(
+                                                                                keyboardType: TextInputType.multiline,
+                                                                                maxLines: null,
+                                                                                style: TextStyle(fontFamily: 'Cairo', fontSize: 12),
+                                                                                controller: review,
+                                                                                cursorColor: mainColor,
+                                                                                decoration: InputDecoration(contentPadding: EdgeInsets.symmetric(horizontal: 10), enabledBorder: OutlineInputBorder(borderRadius: BorderRadius.circular(10), borderSide: BorderSide(color: Colors.transparent, width: 2)), disabledBorder: OutlineInputBorder(borderRadius: BorderRadius.circular(10), borderSide: BorderSide(color: Colors.transparent, width: 2)), focusedBorder: OutlineInputBorder(borderRadius: BorderRadius.circular(10), borderSide: BorderSide(color: mainColor, width: 2)), focusColor: mainColor, hoverColor: mainColor, border: InputBorder.none, labelText: 'تقييم', hintText: 'اكتب تقييمك هنا', hintStyle: TextStyle(fontFamily: 'Cairo', fontSize: 12), labelStyle: TextStyle(fontFamily: 'Cairo', fontSize: 12), floatingLabelBehavior: FloatingLabelBehavior.never),
+                                                                              ),
+                                                                            ),
+                                                                            Divider(
+                                                                              color: Colors.transparent,
+                                                                            ),
+                                                                            Row(
+                                                                              children: [
+                                                                                Expanded(
+                                                                                  child: GestureDetector(
+                                                                                    onTap: () async {
+                                                                                      var nameFunc = await FirebaseFirestore.instance.collection('users').doc(FirebaseAuth.instance.currentUser!.uid).get().then((value) => value['firstname']);
+
+                                                                                      String name = nameFunc;
+                                                                                      await FirebaseFirestore.instance.collection('reviews').doc(FirebaseAuth.instance.currentUser!.uid + widget.itemID).set({
+                                                                                        'username': name,
+                                                                                        'itemName': widget.itemID,
+                                                                                        'content': review.text.trim(),
+                                                                                        'star': star
+                                                                                      });
+
+                                                                                      snackBarWidget(context, 'تم التقييم بنجاح', Icons.check, Colors.white);
+                                                                                      Navigator.pop(context);
+                                                                                    },
+                                                                                    child: Container(
+                                                                                      padding: EdgeInsets.symmetric(horizontal: 20, vertical: 5),
+                                                                                      decoration: BoxDecoration(
+                                                                                        color: mainColor,
+                                                                                        borderRadius: BorderRadius.circular(10),
+                                                                                      ),
+                                                                                      child: Center(
+                                                                                        child: Text(
+                                                                                          'تقييم المنتج',
+                                                                                          style: TextStyle(
+                                                                                            color: Colors.white,
+                                                                                          ),
+                                                                                        ),
+                                                                                      ),
+                                                                                    ),
+                                                                                  ),
+                                                                                )
+                                                                              ],
+                                                                            )
+                                                                          ],
+                                                                        ),
+                                                                      ),
+                                                                    ),
+                                                                  ),
+                                                                );
+                                                              });
+                                                        },
+                                                        child: Container(
+                                                          padding: EdgeInsets
+                                                              .symmetric(
+                                                                  horizontal:
+                                                                      20,
+                                                                  vertical: 5),
+                                                          decoration:
+                                                              BoxDecoration(
+                                                            color: itemColor,
+                                                            borderRadius:
+                                                                BorderRadius
+                                                                    .circular(
+                                                                        10),
+                                                          ),
+                                                          child: Center(
+                                                            child: Text(
+                                                              'تأكيد',
+                                                              style: TextStyle(
+                                                                  color:
+                                                                      mainColor),
+                                                            ),
+                                                          ),
+                                                        ),
+                                                      )
+                                                    ]),
+                                              ]),
+                                        ),
+                                      ),
+                                    ),
+                                  ),
+                                ),
+                              );
+                            } else {
+                              showModalBottomSheet(
+                                  isScrollControlled: true,
+                                  context: context,
+                                  elevation: 100,
+                                  builder: (context) {
+                                    return Padding(
+                                      padding: EdgeInsets.symmetric(
+                                          vertical: 30, horizontal: 20),
+                                      child: Container(
+                                        child: SingleChildScrollView(
+                                          child: Padding(
+                                            padding: MediaQuery.of(context)
+                                                .viewInsets,
+                                            child: Column(
+                                              mainAxisSize: MainAxisSize.min,
+                                              children: [
+                                                Directionality(
+                                                  textDirection:
+                                                      TextDirection.ltr,
+                                                  child: RatingBar(
+                                                      initialRating:
+                                                          star.toDouble(),
+                                                      glowColor: mainColor,
+                                                      ratingWidget:
+                                                          RatingWidget(
+                                                        empty: Icon(
+                                                            Icons.star_border,
+                                                            color: mainColor),
+                                                        half: Icon(
+                                                            Icons.star_half,
+                                                            color: mainColor),
+                                                        full: Icon(Icons.star,
+                                                            color: mainColor),
+                                                      ),
+                                                      onRatingUpdate: (rating) {
+                                                        setState(() {
+                                                          star = rating.toInt();
+                                                        });
+                                                      }),
+                                                ),
+                                                Divider(
+                                                  color: Colors.transparent,
+                                                ),
+                                                Container(
+                                                  decoration: BoxDecoration(
+                                                    borderRadius:
+                                                        BorderRadius.circular(
+                                                            10),
+                                                    color: CupertinoColors
+                                                        .tertiarySystemFill,
+                                                  ),
+                                                  child: TextField(
+                                                    keyboardType:
+                                                        TextInputType.multiline,
+                                                    maxLines: null,
+                                                    style: TextStyle(
+                                                        fontFamily: 'Cairo',
+                                                        fontSize: 12),
+                                                    controller: review,
+                                                    cursorColor: mainColor,
+                                                    decoration: InputDecoration(
+                                                        contentPadding:
+                                                            EdgeInsets.symmetric(
+                                                                horizontal: 10),
+                                                        enabledBorder: OutlineInputBorder(
+                                                            borderRadius:
+                                                                BorderRadius.circular(
+                                                                    10),
+                                                            borderSide: BorderSide(
+                                                                color: Colors
+                                                                    .transparent,
+                                                                width: 2)),
+                                                        disabledBorder: OutlineInputBorder(
+                                                            borderRadius:
+                                                                BorderRadius.circular(
+                                                                    10),
+                                                            borderSide: BorderSide(
+                                                                color: Colors
+                                                                    .transparent,
+                                                                width: 2)),
+                                                        focusedBorder:
+                                                            OutlineInputBorder(
+                                                                borderRadius:
+                                                                    BorderRadius.circular(10),
+                                                                borderSide: BorderSide(color: mainColor, width: 2)),
+                                                        focusColor: mainColor,
+                                                        hoverColor: mainColor,
+                                                        border: InputBorder.none,
+                                                        labelText: 'تقييم',
+                                                        hintText: 'اكتب تقييمك هنا',
+                                                        hintStyle: TextStyle(fontFamily: 'Cairo', fontSize: 12),
+                                                        labelStyle: TextStyle(fontFamily: 'Cairo', fontSize: 12),
+                                                        floatingLabelBehavior: FloatingLabelBehavior.never),
+                                                  ),
+                                                ),
+                                                Divider(
+                                                  color: Colors.transparent,
+                                                ),
+                                                Row(
+                                                  children: [
+                                                    Expanded(
+                                                      child: GestureDetector(
+                                                        onTap: () async {
+                                                          var nameFunc = await FirebaseFirestore
+                                                              .instance
+                                                              .collection(
+                                                                  'users')
+                                                              .doc(FirebaseAuth
+                                                                  .instance
+                                                                  .currentUser!
+                                                                  .uid)
+                                                              .get()
+                                                              .then((value) =>
+                                                                  value[
+                                                                      'firstname']);
+
+                                                          String name =
+                                                              nameFunc;
+                                                          await FirebaseFirestore
+                                                              .instance
+                                                              .collection(
+                                                                  'reviews')
+                                                              .doc(FirebaseAuth
+                                                                      .instance
+                                                                      .currentUser!
+                                                                      .uid +
+                                                                  widget.itemID)
+                                                              .set({
+                                                            'username': name,
+                                                            'itemName':
+                                                                widget.itemID,
+                                                            'content': review
+                                                                .text
+                                                                .trim(),
+                                                            'star': star
+                                                          });
+
+                                                          snackBarWidget(
+                                                              context,
+                                                              'تم التقييم بنجاح',
+                                                              Icons.check,
+                                                              Colors.white);
+                                                          Navigator.pop(
+                                                              context);
+                                                        },
+                                                        child: Container(
+                                                          padding: EdgeInsets
+                                                              .symmetric(
+                                                                  horizontal:
+                                                                      20,
+                                                                  vertical: 5),
+                                                          decoration:
+                                                              BoxDecoration(
+                                                            color: mainColor,
+                                                            borderRadius:
+                                                                BorderRadius
+                                                                    .circular(
+                                                                        10),
+                                                          ),
+                                                          child: Center(
+                                                            child: Text(
+                                                              'تقييم المنتج',
+                                                              style: TextStyle(
+                                                                color: Colors
+                                                                    .white,
+                                                              ),
+                                                            ),
+                                                          ),
+                                                        ),
+                                                      ),
+                                                    )
+                                                  ],
+                                                )
+                                              ],
+                                            ),
+                                          ),
+                                        ),
+                                      ),
+                                    );
+                                  });
+                            }
+                          },
+                          child: Container(
+                            padding: EdgeInsets.symmetric(
+                                horizontal: 20, vertical: 5),
+                            decoration: BoxDecoration(
+                              color: mainColor,
+                              borderRadius: BorderRadius.circular(10),
+                            ),
+                            child: Center(
+                              child: Text(
+                                'تقييم المنتج',
+                                style: TextStyle(
+                                  color: Colors.white,
+                                ),
+                              ),
+                            ),
+                          ),
+                        ),
+                      )
+                    ],
+                  ),
+                  Divider(
+                    color: Colors.transparent,
+                  ),
+                  Container(
+                      height: 220,
+                      decoration: BoxDecoration(
+                        color: mainColor,
+                        borderRadius: BorderRadius.circular(10),
+                      ),
+                      width: double.infinity,
+                      child: Column(
+                        children: [
+                          Text(
+                            'التقييمات',
+                            style: TextStyle(
+                              color: itemColor,
+                              fontSize: 18,
+                              fontWeight: FontWeight.bold,
+                            ),
+                          ),
+                          Expanded(
+                            child: StreamBuilder(
+                              stream: FirebaseFirestore.instance
+                                  .collection('reviews')
+                                  .where('itemName', isEqualTo: widget.itemID)
+                                  .snapshots(),
+                              builder: (context,
+                                  AsyncSnapshot<QuerySnapshot> snapshot) {
+                                if (snapshot.hasData) {
+                                  return ListView(
+                                      children: getExpenseItems(snapshot));
+                                }
+                                return CupertinoActivityIndicator();
+                              },
+                            ),
+                          ),
+                        ],
+                      )),
                   Divider(
                     color: Colors.transparent,
                   ),
@@ -356,6 +928,9 @@ class _DetailScreenState extends State<DetailScreen> {
                                               MaterialPageRoute(
                                                   builder: (context) =>
                                                       DetailScreen(
+                                                          itemID: displayItems[
+                                                                  index]
+                                                              .itemID,
                                                           description:
                                                               displayItems[
                                                                       index]
@@ -437,4 +1012,47 @@ class _DetailScreenState extends State<DetailScreen> {
       ),
     );
   }
+}
+
+getExpenseItems(AsyncSnapshot<QuerySnapshot> snapshot) {
+  return snapshot.data!.docs
+      .map(
+        (doc) => Padding(
+          padding: const EdgeInsets.symmetric(vertical: 20.0, horizontal: 10),
+          child: new Container(
+            padding: EdgeInsets.symmetric(horizontal: 20, vertical: 10),
+            decoration: BoxDecoration(
+              border: Border.all(color: mainColor, width: 2),
+              color: itemColor,
+              borderRadius: BorderRadius.circular(10),
+            ),
+            child: Column(children: [
+              Row(
+                children: [
+                  FittedBox(child: Text(doc['username'])),
+                  VerticalDivider(color: Colors.transparent),
+                  Directionality(
+                    textDirection: TextDirection.ltr,
+                    child: RatingBar(
+                        initialRating: (doc["star"] as int).toDouble(),
+                        ignoreGestures: true,
+                        glowColor: mainColor,
+                        ratingWidget: RatingWidget(
+                          empty: Icon(Icons.star_border, color: mainColor),
+                          half: Icon(Icons.star_half, color: mainColor),
+                          full: Icon(Icons.star, color: mainColor),
+                        ),
+                        onRatingUpdate: (rating) {}),
+                  ),
+                ],
+              ),
+              Divider(
+                color: Colors.transparent,
+              ),
+              Text(doc["content"]),
+            ]),
+          ),
+        ),
+      )
+      .toList();
 }

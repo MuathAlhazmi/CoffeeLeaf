@@ -108,6 +108,7 @@ class _CartScreensState extends State<CartScreens> {
                               context,
                               MaterialPageRoute(
                                   builder: (context) => DetailScreen(
+                                      itemID: cart[index].itemID,
                                       description: cart[index].description,
                                       image: cart[index].image,
                                       name: cart[index].name,

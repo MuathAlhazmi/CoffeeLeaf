@@ -405,6 +405,8 @@ class _HomePageState extends State<HomePage> {
                                                 MaterialPageRoute(
                                                     builder: (context) =>
                                                         DetailScreen(
+                                                            itemID: items[index]
+                                                                .itemID,
                                                             description: items[
                                                                     index]
                                                                 .description,

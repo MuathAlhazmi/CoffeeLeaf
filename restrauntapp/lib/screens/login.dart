@@ -457,6 +457,7 @@ class _LoginScreenState extends State<LoginScreen> {
                 context,
                 MaterialPageRoute(
                   builder: (context) => DetailScreen(
+                    itemID: items[0].itemID,
                     description: items[0].description,
                     price: items[0].price,
                     image: items[0].image,

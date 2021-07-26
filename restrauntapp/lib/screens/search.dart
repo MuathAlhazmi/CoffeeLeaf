@@ -89,6 +89,8 @@ class _SearchPageState extends State<SearchPage> {
                                           MaterialPageRoute(
                                               builder: (context) =>
                                                   DetailScreen(
+                                                      itemID:
+                                                          items[index].itemID,
                                                       description: items[index]
                                                           .description,
                                                       price: items[index].price,
@@ -174,13 +176,17 @@ class _SearchPageState extends State<SearchPage> {
                                           MaterialPageRoute(
                                               builder: (context) =>
                                                   DetailScreen(
+                                                      itemID: searchResult[
+                                                              index]
+                                                          .itemID,
                                                       description:
                                                           searchResult[index]
                                                               .description,
                                                       price: searchResult[index]
                                                           .price,
-                                                      image: searchResult[index]
-                                                          .image,
+                                                      image:
+                                                          searchResult[index]
+                                                              .image,
                                                       name:
                                                           searchResult[index]
                                                               .name,
