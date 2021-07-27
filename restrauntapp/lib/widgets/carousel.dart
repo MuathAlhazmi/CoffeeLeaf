@@ -26,19 +26,22 @@ class CarouselWidget extends StatelessWidget {
                         Expanded(
                           child: Padding(
                             padding: const EdgeInsets.only(bottom: 25),
-                            child: ClipRRect(
-                              borderRadius: BorderRadius.circular(20),
-                              child: CachedNetworkImage(
-                                width: double.infinity,
-                                imageUrl: imageUrl,
-                                progressIndicatorBuilder:
-                                    (context, url, downloadProgress) =>
-                                        CupertinoActivityIndicator(radius: 10),
-                                errorWidget: (context, url, error) => Icon(
-                                  Icons.error,
-                                  color: Colors.white,
+                            child: Hero(
+                              tag: imageUrl + title,
+                              child: ClipRRect(
+                                borderRadius: BorderRadius.circular(20),
+                                child: CachedNetworkImage(
+                                  width: double.infinity,
+                                  imageUrl: imageUrl,
+                                  progressIndicatorBuilder: (context, url,
+                                          downloadProgress) =>
+                                      CupertinoActivityIndicator(radius: 10),
+                                  errorWidget: (context, url, error) => Icon(
+                                    Icons.error,
+                                    color: Colors.white,
+                                  ),
+                                  fit: BoxFit.cover,
                                 ),
-                                fit: BoxFit.cover,
                               ),
                             ),
                           ),

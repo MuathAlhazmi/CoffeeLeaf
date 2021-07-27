@@ -39,52 +39,48 @@ class _CustomBottomNavigationBarState extends State<CustomBottomNavigationBar> {
         color: mainColor,
       ),
       padding: EdgeInsets.symmetric(horizontal: 20, vertical: 10),
-      height: 90,
-      child: SafeArea(
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.spaceAround,
-          children: widget.children.map((item) {
-            var color = item.color;
-            var icon = item.icon;
-            int index = widget.children.indexOf(item);
-            return GestureDetector(
-              onTap: () {
-                _changeIndex(index);
-              },
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceAround,
-                children: <Widget>[
-                  widget.currentIndex == index
-                      ? DecoratedIcon(
-                          icon,
-                          size: 20,
-                          color: widget.currentIndex == index
-                              ? color
-                              : Colors.grey,
-                          shadows: [
-                            BoxShadow(
-                              blurRadius: 15.0,
-                              color: Colors.white.withOpacity(.7),
-                            ),
-                            BoxShadow(
-                              blurRadius: 20.0,
-                              color: Colors.white.withOpacity(.4),
-                              offset: Offset(0, 2.0),
-                            ),
-                          ],
-                        )
-                      : DecoratedIcon(
-                          icon,
-                          size: 20,
-                          color: widget.currentIndex == index
-                              ? color
-                              : Colors.grey,
-                        ),
-                ],
-              ),
-            );
-          }).toList(),
-        ),
+      height: 70,
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceAround,
+        children: widget.children.map((item) {
+          var color = item.color;
+          var icon = item.icon;
+          int index = widget.children.indexOf(item);
+          return GestureDetector(
+            onTap: () {
+              _changeIndex(index);
+            },
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceAround,
+              children: <Widget>[
+                widget.currentIndex == index
+                    ? DecoratedIcon(
+                        icon,
+                        size: 20,
+                        color:
+                            widget.currentIndex == index ? color : Colors.grey,
+                        shadows: [
+                          BoxShadow(
+                            blurRadius: 15.0,
+                            color: Colors.white.withOpacity(.7),
+                          ),
+                          BoxShadow(
+                            blurRadius: 20.0,
+                            color: Colors.white.withOpacity(.4),
+                            offset: Offset(0, 2.0),
+                          ),
+                        ],
+                      )
+                    : DecoratedIcon(
+                        icon,
+                        size: 20,
+                        color:
+                            widget.currentIndex == index ? color : Colors.grey,
+                      ),
+              ],
+            ),
+          );
+        }).toList(),
       ),
     );
   }

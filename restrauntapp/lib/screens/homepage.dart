@@ -11,6 +11,7 @@ import 'package:restrauntapp/main.dart';
 import 'package:restrauntapp/screens/cart.dart';
 import 'package:restrauntapp/screens/detailscreen.dart';
 import 'package:restrauntapp/screens/info.dart';
+import 'package:restrauntapp/screens/tablebooking.dart';
 import 'package:restrauntapp/widgets/carousel.dart';
 
 class HomePage extends StatefulWidget {
@@ -22,13 +23,206 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
+  int pageIndex = 0;
+  final CarouselController _controller = CarouselController();
+
   @override
   Widget build(BuildContext context) {
+    List<Widget> carouselWidgets = [
+      GestureDetector(
+        onTap: () {
+          Navigator.push(
+              context,
+              MaterialPageRoute(
+                  builder: (context) => TableBooking(
+                        image:
+                            'https://images.unsplash.com/photo-1502749793729-68bfc5666aaa?ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&ixlib=rb-1.2.1&auto=format&fit=crop&w=3300&q=80',
+                        title: 'هل تريد حجز طاولة؟',
+                        sub: 'اضغط هنا لكي تحجز الآن',
+                      )));
+        },
+        child: CarouselWidget(
+          child: Align(
+            alignment: Alignment.bottomCenter,
+            child: Container(
+              padding: EdgeInsets.symmetric(horizontal: 20),
+              child: ClipRRect(
+                borderRadius: BorderRadius.circular(10),
+                child: BackdropFilter(
+                  filter: ImageFilter.blur(sigmaX: 5, sigmaY: 5),
+                  child: Container(
+                    padding: EdgeInsets.symmetric(vertical: 5, horizontal: 20),
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(10),
+                      color: mainColor.withOpacity(.3),
+                    ),
+                    child: Column(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        FittedBox(
+                          child: Text(
+                            'هل تريد حجز طاولة؟',
+                            style: Theme.of(context).textTheme.headline5!.apply(
+                                  color: Colors.white,
+                                ),
+                          ),
+                        ),
+                        Padding(
+                          padding: const EdgeInsets.symmetric(horizontal: 20),
+                          child: FittedBox(
+                            child: Text(
+                              'اضغط هنا لكي تحجز الآن',
+                              style:
+                                  Theme.of(context).textTheme.subtitle1!.apply(
+                                        color: Colors.white,
+                                      ),
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                ),
+              ),
+            ),
+          ),
+          imageUrl:
+              'https://images.unsplash.com/photo-1502749793729-68bfc5666aaa?ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&ixlib=rb-1.2.1&auto=format&fit=crop&w=3300&q=80',
+          title: 'هل تريد حجز طاولة؟',
+        ),
+      ),
+      GestureDetector(
+        onTap: () {
+          Navigator.push(
+              context,
+              MaterialPageRoute(
+                  builder: (context) => InfoPage(
+                      content: infoModels[1].content,
+                      image: infoModels[1].image,
+                      title: infoModels[1].title,
+                      sub: infoModels[1].sub,
+                      contentTitle: infoModels[1].contentTitle,
+                      iconDataList: infoModels[1].iconDataList)));
+        },
+        child: CarouselWidget(
+          title: infoModels[1].title,
+          imageUrl: infoModels[1].image,
+          child: Align(
+            alignment: Alignment.bottomCenter,
+            child: Container(
+              padding: EdgeInsets.symmetric(horizontal: 20),
+              child: ClipRRect(
+                borderRadius: BorderRadius.circular(10),
+                child: BackdropFilter(
+                  filter: ImageFilter.blur(sigmaX: 5, sigmaY: 5),
+                  child: Container(
+                    padding: EdgeInsets.symmetric(vertical: 5, horizontal: 20),
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(10),
+                      color: mainColor.withOpacity(.3),
+                    ),
+                    child: Column(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        FittedBox(
+                          child: Text(
+                            infoModels[1].title,
+                            style: Theme.of(context).textTheme.headline5!.apply(
+                                  color: Colors.white,
+                                ),
+                          ),
+                        ),
+                        Padding(
+                          padding: const EdgeInsets.symmetric(horizontal: 20),
+                          child: FittedBox(
+                            child: Text(
+                              infoModels[1].sub,
+                              style:
+                                  Theme.of(context).textTheme.subtitle1!.apply(
+                                        color: Colors.white,
+                                      ),
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                ),
+              ),
+            ),
+          ),
+        ),
+      ),
+      GestureDetector(
+        onTap: () {
+          Navigator.push(
+              context,
+              MaterialPageRoute(
+                  builder: (context) => InfoPage(
+                      content: infoModels[0].content,
+                      image: infoModels[0].image,
+                      title: infoModels[0].title,
+                      sub: infoModels[0].sub,
+                      contentTitle: infoModels[0].contentTitle,
+                      iconDataList: infoModels[0].iconDataList)));
+        },
+        child: CarouselWidget(
+          title: infoModels[0].title,
+          imageUrl: infoModels[0].image,
+          child: Align(
+            alignment: Alignment.bottomCenter,
+            child: Container(
+              padding: EdgeInsets.symmetric(horizontal: 20),
+              child: ClipRRect(
+                borderRadius: BorderRadius.circular(10),
+                child: BackdropFilter(
+                  filter: ImageFilter.blur(sigmaX: 5, sigmaY: 5),
+                  child: Container(
+                    padding: EdgeInsets.symmetric(vertical: 5, horizontal: 20),
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(10),
+                      color: mainColor.withOpacity(.3),
+                    ),
+                    child: Column(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        FittedBox(
+                          child: Text(
+                            infoModels[0].title,
+                            style: Theme.of(context).textTheme.headline5!.apply(
+                                  color: Colors.white,
+                                ),
+                          ),
+                        ),
+                        Padding(
+                          padding: const EdgeInsets.symmetric(horizontal: 20),
+                          child: FittedBox(
+                            child: Text(
+                              infoModels[0].sub,
+                              style:
+                                  Theme.of(context).textTheme.subtitle1!.apply(
+                                        color: Colors.white,
+                                      ),
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                ),
+              ),
+            ),
+          ),
+        ),
+      ),
+    ];
     return NestedScrollView(
       headerSliverBuilder: (BuildContext context, bool innerBoxIsScrolled) {
         return <Widget>[
           SliverSafeArea(
             sliver: SliverAppBar(
+              elevation: 10,
+              shadowColor: mainColor,
               leadingWidth: 65,
               leading: Padding(
                 padding: const EdgeInsets.all(8.0),
@@ -163,7 +357,9 @@ class _HomePageState extends State<HomePage> {
                 : Padding(
                     padding: const EdgeInsets.symmetric(vertical: 10),
                     child: CarouselSlider(
+                        carouselController: _controller,
                         options: CarouselOptions(
+                          enableInfiniteScroll: false,
                           viewportFraction: 0.7,
                           height: 220.0,
                           autoPlay: true,
@@ -171,165 +367,47 @@ class _HomePageState extends State<HomePage> {
                           autoPlayInterval: Duration(seconds: 3),
                           autoPlayAnimationDuration:
                               Duration(milliseconds: 500),
-                          autoPlayCurve: Curves.fastOutSlowIn,
+                          autoPlayCurve: Curves.easeInOut,
                           pauseAutoPlayOnTouch: true,
                           aspectRatio: 2.0,
-                          onPageChanged: (index, reason) {},
+                          onPageChanged: (index, reason) {
+                            setState(() {
+                              pageIndex = index;
+                            });
+                          },
                         ),
-                        items: [
-                          GestureDetector(
-                            onTap: () {
-                              Navigator.push(
-                                  context,
-                                  MaterialPageRoute(
-                                      builder: (context) => InfoPage(
-                                          content: infoModels[1].content,
-                                          image: infoModels[1].image,
-                                          title: infoModels[1].title,
-                                          sub: infoModels[1].sub,
-                                          contentTitle:
-                                              infoModels[1].contentTitle,
-                                          iconDataList:
-                                              infoModels[1].iconDataList)));
-                            },
-                            child: CarouselWidget(
-                              title: infoModels[1].title,
-                              imageUrl: infoModels[1].image,
-                              child: Align(
-                                alignment: Alignment.bottomCenter,
-                                child: Container(
-                                  padding: EdgeInsets.symmetric(horizontal: 20),
-                                  child: ClipRRect(
-                                    borderRadius: BorderRadius.circular(10),
-                                    child: BackdropFilter(
-                                      filter: ImageFilter.blur(
-                                          sigmaX: 5, sigmaY: 5),
-                                      child: Container(
-                                        padding: EdgeInsets.symmetric(
-                                            vertical: 5, horizontal: 20),
-                                        decoration: BoxDecoration(
-                                          borderRadius:
-                                              BorderRadius.circular(10),
-                                          color: mainColor.withOpacity(.3),
-                                        ),
-                                        child: Column(
-                                          mainAxisSize: MainAxisSize.min,
-                                          children: [
-                                            FittedBox(
-                                              child: Text(
-                                                infoModels[1].title,
-                                                style: Theme.of(context)
-                                                    .textTheme
-                                                    .headline5!
-                                                    .apply(
-                                                      color: Colors.white,
-                                                    ),
-                                              ),
-                                            ),
-                                            Padding(
-                                              padding:
-                                                  const EdgeInsets.symmetric(
-                                                      horizontal: 20),
-                                              child: FittedBox(
-                                                child: Text(
-                                                  infoModels[1].sub,
-                                                  style: Theme.of(context)
-                                                      .textTheme
-                                                      .subtitle1!
-                                                      .apply(
-                                                        color: Colors.white,
-                                                      ),
-                                                ),
-                                              ),
-                                            ),
-                                          ],
-                                        ),
-                                      ),
-                                    ),
-                                  ),
-                                ),
-                              ),
-                            ),
-                          ),
-                          GestureDetector(
-                            onTap: () {
-                              Navigator.push(
-                                  context,
-                                  MaterialPageRoute(
-                                      builder: (context) => InfoPage(
-                                          content: infoModels[0].content,
-                                          image: infoModels[0].image,
-                                          title: infoModels[0].title,
-                                          sub: infoModels[0].sub,
-                                          contentTitle:
-                                              infoModels[0].contentTitle,
-                                          iconDataList:
-                                              infoModels[0].iconDataList)));
-                            },
-                            child: CarouselWidget(
-                              title: infoModels[0].title + 'Hero',
-                              imageUrl: infoModels[0].image,
-                              child: Align(
-                                alignment: Alignment.bottomCenter,
-                                child: Container(
-                                  padding: EdgeInsets.symmetric(horizontal: 20),
-                                  child: ClipRRect(
-                                    borderRadius: BorderRadius.circular(10),
-                                    child: BackdropFilter(
-                                      filter: ImageFilter.blur(
-                                          sigmaX: 5, sigmaY: 5),
-                                      child: Container(
-                                        padding: EdgeInsets.symmetric(
-                                            vertical: 5, horizontal: 20),
-                                        decoration: BoxDecoration(
-                                          borderRadius:
-                                              BorderRadius.circular(10),
-                                          color: mainColor.withOpacity(.3),
-                                        ),
-                                        child: Column(
-                                          mainAxisSize: MainAxisSize.min,
-                                          children: [
-                                            FittedBox(
-                                              child: Text(
-                                                infoModels[0].title,
-                                                style: Theme.of(context)
-                                                    .textTheme
-                                                    .headline5!
-                                                    .apply(
-                                                      color: Colors.white,
-                                                    ),
-                                              ),
-                                            ),
-                                            Padding(
-                                              padding:
-                                                  const EdgeInsets.symmetric(
-                                                      horizontal: 20),
-                                              child: FittedBox(
-                                                child: Text(
-                                                  infoModels[0].sub,
-                                                  style: Theme.of(context)
-                                                      .textTheme
-                                                      .subtitle1!
-                                                      .apply(
-                                                        color: Colors.white,
-                                                      ),
-                                                ),
-                                              ),
-                                            ),
-                                          ],
-                                        ),
-                                      ),
-                                    ),
-                                  ),
-                                ),
-                              ),
-                            ),
-                          ),
-                        ]),
+                        items: carouselWidgets),
                   ),
             Divider(
               color: Colors.transparent,
             ),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: carouselWidgets.asMap().entries.map((entry) {
+                return GestureDetector(
+                  onTap: () => _controller.animateToPage(
+                    entry.key,
+                    duration: Duration(milliseconds: 500),
+                    curve: Curves.easeInOut,
+                  ),
+                  child: AnimatedContainer(
+                    duration: Duration(milliseconds: 500),
+                    width: 20.0,
+                    height: 12.0,
+                    margin:
+                        EdgeInsets.symmetric(vertical: 8.0, horizontal: 4.0),
+                    decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(10),
+                        color: mainColor
+                            .withOpacity(pageIndex == entry.key ? 0.9 : 0.5)),
+                  ),
+                );
+              }).toList(),
+            ),
+            Divider(
+              color: Colors.transparent,
+            ),
+
             // Padding(
             //   padding: const EdgeInsets.symmetric(horizontal: 10),
             //   child: Row(

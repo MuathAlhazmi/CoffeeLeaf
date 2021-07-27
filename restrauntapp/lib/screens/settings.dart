@@ -88,7 +88,7 @@ class _SettingsPageState extends State<SettingsPage> {
                                 number: number,
                                 email: email)));
                   },
-                  iconData: Icons.info,
+                  iconData: CupertinoIcons.profile_circled,
                   title: 'تعديل معلوماتي',
                 ),
               ],

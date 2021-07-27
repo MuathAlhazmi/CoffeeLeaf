@@ -58,13 +58,16 @@ class InfoPage extends StatelessWidget {
                 Divider(
                   color: Colors.white,
                 ),
-                ClipRRect(
-                  borderRadius: BorderRadius.circular(20),
-                  child: CachedNetworkImage(
-                    imageUrl: image,
-                    height: MediaQuery.of(context).size.height * .2,
-                    width: double.infinity,
-                    fit: BoxFit.cover,
+                Hero(
+                  tag: image + title,
+                  child: ClipRRect(
+                    borderRadius: BorderRadius.circular(20),
+                    child: CachedNetworkImage(
+                      imageUrl: image,
+                      height: MediaQuery.of(context).size.height * .2,
+                      width: double.infinity,
+                      fit: BoxFit.cover,
+                    ),
                   ),
                 ),
                 Row(

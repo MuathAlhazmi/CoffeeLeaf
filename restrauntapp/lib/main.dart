@@ -8,6 +8,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:flutter_staggered_animations/flutter_staggered_animations.dart';
+import 'package:restrauntapp/constants/constants.dart';
 import 'package:restrauntapp/data/data.dart';
 import 'package:restrauntapp/screens/cart.dart';
 import 'package:restrauntapp/screens/homepage.dart';
@@ -73,27 +74,40 @@ class _LoadingListPageState extends State<LoadingListPage> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      bottomNavigationBar: CustomBottomNavigationBar(
-        currentIndex: currentIndex1,
-        onChange: (index) {
-          setState(() {
-            currentIndex1 = index;
-          });
-        },
-        children: [
-          CustomBottomNavigationItem(
-              icon: CupertinoIcons.home, color: Colors.white),
-          CustomBottomNavigationItem(
-              icon: CupertinoIcons.search, color: Colors.white),
-          CustomBottomNavigationItem(
-              icon: CupertinoIcons.person_circle, color: Colors.white),
-          CustomBottomNavigationItem(
-              icon: CupertinoIcons.cart, color: Colors.white),
-        ],
-      ),
-      body: SafeArea(
-          child: currentIndex1 == 0
+    return Container(
+      decoration: BoxDecoration(
+          gradient: LinearGradient(
+              begin: Alignment.topCenter,
+              end: Alignment.bottomCenter,
+              stops: [
+            0.1,
+            0.9
+          ],
+              colors: [
+            currentIndex1 == 0 ? mainColor : Colors.white,
+            mainColor
+          ])),
+      child: SafeArea(
+        child: Scaffold(
+          bottomNavigationBar: CustomBottomNavigationBar(
+            currentIndex: currentIndex1,
+            onChange: (index) {
+              setState(() {
+                currentIndex1 = index;
+              });
+            },
+            children: [
+              CustomBottomNavigationItem(
+                  icon: CupertinoIcons.home, color: Colors.white),
+              CustomBottomNavigationItem(
+                  icon: CupertinoIcons.search, color: Colors.white),
+              CustomBottomNavigationItem(
+                  icon: CupertinoIcons.person_circle, color: Colors.white),
+              CustomBottomNavigationItem(
+                  icon: CupertinoIcons.cart, color: Colors.white),
+            ],
+          ),
+          body: currentIndex1 == 0
               ? HomePage(
                   enabled: enabled,
                 )
@@ -103,7 +117,9 @@ class _LoadingListPageState extends State<LoadingListPage> {
                     )
                   : currentIndex1 == 2
                       ? SettingsPage()
-                      : CartScreens()),
+                      : CartScreens(),
+        ),
+      ),
     );
   }
 }

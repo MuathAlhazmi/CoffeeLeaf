@@ -4,6 +4,7 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flash/flash.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 import 'package:local_auth/local_auth.dart';
 import 'package:restrauntapp/constants/constants.dart';
 import 'package:restrauntapp/data/data.dart';
@@ -96,377 +97,380 @@ class _CartScreensState extends State<CartScreens> {
               color: Colors.white,
             ),
             Expanded(
-                child: ListView.separated(
-                    separatorBuilder: (context, index) => Divider(
-                          color: Colors.transparent,
-                        ),
-                    itemCount: cart.length,
-                    itemBuilder: (context, index) {
-                      return GestureDetector(
-                        onTap: () {
-                          Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                  builder: (context) => DetailScreen(
-                                      itemID: cart[index].itemID,
-                                      description: cart[index].description,
-                                      image: cart[index].image,
-                                      name: cart[index].name,
-                                      quantity: cart[index].quantity,
-                                      price: cart[index].price)));
-                        },
-                        child: Container(
-                          padding: EdgeInsets.symmetric(
-                            horizontal: 20,
-                          ),
-                          decoration: BoxDecoration(
-                            color: mainColor,
-                            borderRadius: BorderRadius.circular(20),
-                          ),
-                          height: 90,
-                          child: Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            children: [
-                              Padding(
-                                padding:
-                                    const EdgeInsets.symmetric(vertical: 10),
-                                child: ClipRRect(
-                                  borderRadius: BorderRadius.circular(10),
-                                  child: CachedNetworkImage(
-                                    height: 80,
-                                    width: 80,
-                                    imageUrl: cart[index].image,
-                                    progressIndicatorBuilder: (context, url,
-                                            downloadProgress) =>
-                                        CupertinoActivityIndicator(radius: 10),
-                                    errorWidget: (context, url, error) => Icon(
-                                      Icons.error,
-                                      color: Colors.white,
+                child: cart.length == 0
+                    ? SvgPicture.asset(
+                        'assets/images/Shopping cart_Monochromatic.svg',
+                        color: mainColor,
+                      )
+                    : ListView.separated(
+                        separatorBuilder: (context, index) => Divider(
+                              color: Colors.transparent,
+                            ),
+                        itemCount: cart.length,
+                        itemBuilder: (context, index) {
+                          return GestureDetector(
+                            onTap: () {
+                              Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                      builder: (context) => DetailScreen(
+                                          itemID: cart[index].itemID,
+                                          description: cart[index].description,
+                                          image: cart[index].image,
+                                          name: cart[index].name,
+                                          quantity: cart[index].quantity,
+                                          price: cart[index].price)));
+                            },
+                            child: Container(
+                              padding: EdgeInsets.symmetric(
+                                horizontal: 20,
+                              ),
+                              decoration: BoxDecoration(
+                                color: mainColor,
+                                borderRadius: BorderRadius.circular(20),
+                              ),
+                              height: 90,
+                              child: Row(
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceBetween,
+                                children: [
+                                  Padding(
+                                    padding: const EdgeInsets.symmetric(
+                                        vertical: 10),
+                                    child: ClipRRect(
+                                      borderRadius: BorderRadius.circular(10),
+                                      child: CachedNetworkImage(
+                                        height: 80,
+                                        width: 80,
+                                        imageUrl: cart[index].image,
+                                        progressIndicatorBuilder:
+                                            (context, url, downloadProgress) =>
+                                                CupertinoActivityIndicator(
+                                                    radius: 10),
+                                        errorWidget: (context, url, error) =>
+                                            Icon(
+                                          Icons.error,
+                                          color: Colors.white,
+                                        ),
+                                        fit: BoxFit.cover,
+                                      ),
                                     ),
-                                    fit: BoxFit.cover,
                                   ),
-                                ),
-                              ),
-                              VerticalDivider(
-                                color: Colors.transparent,
-                              ),
-                              Expanded(
-                                child: Padding(
-                                  padding:
-                                      const EdgeInsets.symmetric(vertical: 10),
-                                  child: Column(
-                                    mainAxisAlignment:
-                                        MainAxisAlignment.spaceBetween,
-                                    children: [
-                                      Text(
-                                        cart[index].name,
-                                        style: TextStyle(
-                                          color: itemColor,
-                                        ),
-                                      ),
-                                      Text(
-                                        'SAR ${cart[index].price.toString()}',
-                                        style: TextStyle(
-                                          color: itemColor,
-                                        ),
-                                      ),
-                                    ],
+                                  VerticalDivider(
+                                    color: Colors.transparent,
                                   ),
-                                ),
-                              ),
-                              GestureDetector(
-                                onTap: () {
-                                  print('e');
-                                },
-                                child: Container(
-                                  padding: EdgeInsets.symmetric(
-                                      horizontal: 15, vertical: 10),
-                                  child: Column(
-                                    mainAxisAlignment:
-                                        MainAxisAlignment.spaceBetween,
-                                    children: [
-                                      GestureDetector(
-                                        onTap: () {
-                                          if (cart[index].quantity < 5) {
-                                            setState(() {
-                                              cart[index].quantity++;
-                                            });
-                                          }
-                                        },
-                                        child: Material(
-                                          elevation: 10,
-                                          shadowColor: mainColor,
-                                          color: Colors.transparent,
-                                          borderRadius:
-                                              BorderRadius.circular(5),
-                                          child: Container(
-                                            padding: EdgeInsets.all(3),
-                                            decoration: BoxDecoration(
+                                  Expanded(
+                                    child: Padding(
+                                      padding: const EdgeInsets.symmetric(
+                                          vertical: 10),
+                                      child: Column(
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.spaceBetween,
+                                        children: [
+                                          Text(
+                                            cart[index].name,
+                                            style: TextStyle(
                                               color: itemColor,
-                                              borderRadius:
-                                                  BorderRadius.circular(5),
-                                            ),
-                                            child: Icon(
-                                              Icons.add,
-                                              size: 15,
-                                              color: mainColor,
                                             ),
                                           ),
-                                        ),
+                                          Text(
+                                            'SAR ${cart[index].price.toString()}',
+                                            style: TextStyle(
+                                              color: itemColor,
+                                            ),
+                                          ),
+                                        ],
                                       ),
-                                      Text(
-                                        cart[index].quantity.toString(),
-                                        style: TextStyle(
-                                          color: itemColor,
-                                        ),
-                                      ),
-                                      GestureDetector(
-                                        onTap: () {
-                                          if (cart[index].quantity > 1) {
-                                            setState(() {
-                                              cart[index].quantity--;
-                                            });
-                                          }
-                                          if (cart[index].quantity == 1) {
-                                            setState(() {
-                                              showDialog(
-                                                context: context,
-                                                builder: (context) => Dialog(
-                                                  insetPadding:
-                                                      EdgeInsets.all(20),
-                                                  shape: RoundedRectangleBorder(
-                                                    borderRadius:
-                                                        BorderRadius.circular(
-                                                            15),
-                                                  ),
-                                                  elevation: 0,
-                                                  backgroundColor:
-                                                      Colors.transparent,
-                                                  child: Material(
-                                                    color: Colors.transparent,
-                                                    shadowColor: mainColor,
-                                                    elevation: 20,
-                                                    child: BackdropFilter(
-                                                      filter: ImageFilter.blur(
-                                                          sigmaX: 10,
-                                                          sigmaY: 10),
-                                                      child: ClipRRect(
+                                    ),
+                                  ),
+                                  GestureDetector(
+                                    onTap: () {
+                                      print('e');
+                                    },
+                                    child: Container(
+                                      padding: EdgeInsets.symmetric(
+                                          horizontal: 15, vertical: 10),
+                                      child: Column(
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.spaceBetween,
+                                        children: [
+                                          GestureDetector(
+                                            onTap: () {
+                                              if (cart[index].quantity < 5) {
+                                                setState(() {
+                                                  cart[index].quantity++;
+                                                });
+                                              }
+                                            },
+                                            child: Material(
+                                              elevation: 10,
+                                              shadowColor: mainColor,
+                                              color: Colors.transparent,
+                                              borderRadius:
+                                                  BorderRadius.circular(5),
+                                              child: Container(
+                                                padding: EdgeInsets.all(3),
+                                                decoration: BoxDecoration(
+                                                  color: itemColor,
+                                                  borderRadius:
+                                                      BorderRadius.circular(5),
+                                                ),
+                                                child: Icon(
+                                                  Icons.add,
+                                                  size: 15,
+                                                  color: mainColor,
+                                                ),
+                                              ),
+                                            ),
+                                          ),
+                                          Text(
+                                            cart[index].quantity.toString(),
+                                            style: TextStyle(
+                                              color: itemColor,
+                                            ),
+                                          ),
+                                          GestureDetector(
+                                            onTap: () {
+                                              if (cart[index].quantity > 1) {
+                                                setState(() {
+                                                  cart[index].quantity--;
+                                                });
+                                              }
+                                              if (cart[index].quantity == 1) {
+                                                setState(() {
+                                                  showDialog(
+                                                    context: context,
+                                                    builder: (context) =>
+                                                        Dialog(
+                                                      insetPadding:
+                                                          EdgeInsets.all(20),
+                                                      shape:
+                                                          RoundedRectangleBorder(
                                                         borderRadius:
                                                             BorderRadius
-                                                                .circular(20),
-                                                        child: Container(
-                                                          height: 300,
-                                                          padding: EdgeInsets
-                                                              .symmetric(
-                                                                  horizontal:
-                                                                      20,
-                                                                  vertical: 30),
-                                                          decoration: BoxDecoration(
-                                                              shape: BoxShape
-                                                                  .rectangle,
-                                                              color: mainColor,
-                                                              borderRadius:
-                                                                  BorderRadius
-                                                                      .circular(
-                                                                          20)),
-                                                          child: Column(
-                                                            mainAxisAlignment:
-                                                                MainAxisAlignment
-                                                                    .spaceAround,
-                                                            children: [
-                                                              Column(
+                                                                .circular(15),
+                                                      ),
+                                                      elevation: 0,
+                                                      backgroundColor:
+                                                          Colors.transparent,
+                                                      child: Material(
+                                                        color:
+                                                            Colors.transparent,
+                                                        shadowColor: mainColor,
+                                                        elevation: 20,
+                                                        child: BackdropFilter(
+                                                          filter:
+                                                              ImageFilter.blur(
+                                                                  sigmaX: 10,
+                                                                  sigmaY: 10),
+                                                          child: ClipRRect(
+                                                            borderRadius:
+                                                                BorderRadius
+                                                                    .circular(
+                                                                        20),
+                                                            child: Container(
+                                                              height: 300,
+                                                              padding: EdgeInsets
+                                                                  .symmetric(
+                                                                      horizontal:
+                                                                          20,
+                                                                      vertical:
+                                                                          30),
+                                                              decoration: BoxDecoration(
+                                                                  shape: BoxShape
+                                                                      .rectangle,
+                                                                  color:
+                                                                      mainColor,
+                                                                  borderRadius:
+                                                                      BorderRadius
+                                                                          .circular(
+                                                                              20)),
+                                                              child: Column(
+                                                                mainAxisAlignment:
+                                                                    MainAxisAlignment
+                                                                        .spaceAround,
                                                                 children: [
-                                                                  Text(
-                                                                    'هل اتت متأكد؟',
-                                                                    style: TextStyle(
-                                                                        color:
-                                                                            itemColor,
-                                                                        fontWeight:
-                                                                            FontWeight.bold),
+                                                                  Column(
+                                                                    children: [
+                                                                      Text(
+                                                                        'هل اتت متأكد؟',
+                                                                        style: TextStyle(
+                                                                            color:
+                                                                                itemColor,
+                                                                            fontWeight:
+                                                                                FontWeight.bold),
+                                                                      ),
+                                                                      Divider(
+                                                                        color: Colors
+                                                                            .transparent,
+                                                                      ),
+                                                                      Text(
+                                                                        'هل تريد حذف من سلتك ${cart[index].name}',
+                                                                        style:
+                                                                            TextStyle(
+                                                                          color:
+                                                                              itemColor,
+                                                                        ),
+                                                                      ),
+                                                                    ],
                                                                   ),
                                                                   Divider(
                                                                     color: Colors
                                                                         .transparent,
                                                                   ),
-                                                                  Text(
-                                                                    'هل تريد حذف من سلتك ${cart[index].name}',
-                                                                    style:
-                                                                        TextStyle(
-                                                                      color:
-                                                                          itemColor,
-                                                                    ),
-                                                                  ),
-                                                                ],
-                                                              ),
-                                                              Divider(
-                                                                color: Colors
-                                                                    .transparent,
-                                                              ),
-                                                              Row(
-                                                                mainAxisAlignment:
-                                                                    MainAxisAlignment
-                                                                        .spaceEvenly,
-                                                                children: [
-                                                                  GestureDetector(
-                                                                    onTap: () {
-                                                                      Navigator.pop(
-                                                                          context);
-                                                                    },
-                                                                    child:
-                                                                        Container(
-                                                                      padding: EdgeInsets.symmetric(
-                                                                          horizontal:
-                                                                              20,
-                                                                          vertical:
-                                                                              5),
-                                                                      decoration:
-                                                                          BoxDecoration(
-                                                                        color:
-                                                                            mainColor,
-                                                                        borderRadius:
-                                                                            BorderRadius.circular(10),
-                                                                      ),
-                                                                      child:
-                                                                          Center(
+                                                                  Row(
+                                                                    mainAxisAlignment:
+                                                                        MainAxisAlignment
+                                                                            .spaceEvenly,
+                                                                    children: [
+                                                                      GestureDetector(
+                                                                        onTap:
+                                                                            () {
+                                                                          Navigator.pop(
+                                                                              context);
+                                                                        },
                                                                         child:
-                                                                            Text(
-                                                                          'ألغاء',
-                                                                          style:
-                                                                              TextStyle(
+                                                                            Container(
+                                                                          padding: EdgeInsets.symmetric(
+                                                                              horizontal: 20,
+                                                                              vertical: 5),
+                                                                          decoration:
+                                                                              BoxDecoration(
                                                                             color:
-                                                                                itemColor,
+                                                                                mainColor,
+                                                                            borderRadius:
+                                                                                BorderRadius.circular(10),
+                                                                          ),
+                                                                          child:
+                                                                              Center(
+                                                                            child:
+                                                                                Text(
+                                                                              'ألغاء',
+                                                                              style: TextStyle(
+                                                                                color: itemColor,
+                                                                              ),
+                                                                            ),
                                                                           ),
                                                                         ),
                                                                       ),
-                                                                    ),
-                                                                  ),
-                                                                  GestureDetector(
-                                                                    onTap: () {
-                                                                      var element =
-                                                                          cart.elementAt(
-                                                                              index);
+                                                                      GestureDetector(
+                                                                        onTap:
+                                                                            () {
+                                                                          var element =
+                                                                              cart.elementAt(index);
 
-                                                                      setState(
-                                                                          () {
-                                                                        cart.removeAt(
-                                                                            index);
-                                                                      });
-
-                                                                      Navigator.pop(
-                                                                          context);
-
-                                                                      showFlash(
-                                                                          context:
-                                                                              context,
-                                                                          duration: const Duration(
-                                                                              seconds:
-                                                                                  2),
-                                                                          persistent:
-                                                                              true,
-                                                                          builder:
-                                                                              (_, controller) {
-                                                                            return Flash(
-                                                                              margin: EdgeInsets.symmetric(horizontal: 20),
-                                                                              borderRadius: BorderRadius.circular(20),
-                                                                              controller: controller,
-                                                                              backgroundColor: mainColor,
-                                                                              barrierBlur: 13.0,
-                                                                              barrierColor: Colors.black38,
-                                                                              barrierDismissible: true,
-                                                                              behavior: FlashBehavior.floating,
-                                                                              position: FlashPosition.top,
-                                                                              child: FlashBar(
-                                                                                  icon: Icon(Icons.info_outline, color: Colors.white),
-                                                                                  content: Text(
-                                                                                    "لقد  حذفت ${element.name}",
-                                                                                    style: TextStyle(fontSize: 12, color: Colors.white, fontFamily: 'Cairo'),
-                                                                                  ),
-                                                                                  primaryAction: TextButton(
-                                                                                      onPressed: () {
-                                                                                        bool exists = cart.any((file) => file.name == element.name);
-
-                                                                                        if (exists) {
-                                                                                        } else {
-                                                                                          setState(() {
-                                                                                            cart.add(element);
-                                                                                          });
-                                                                                        }
-                                                                                      },
-                                                                                      child: Text(
-                                                                                        'ارجاع المنتج',
-                                                                                        style: TextStyle(fontSize: 13, color: Colors.white),
-                                                                                      ))),
-                                                                            );
+                                                                          setState(
+                                                                              () {
+                                                                            cart.removeAt(index);
                                                                           });
-                                                                    },
-                                                                    child:
-                                                                        Container(
-                                                                      padding: EdgeInsets.symmetric(
-                                                                          horizontal:
-                                                                              20,
-                                                                          vertical:
-                                                                              5),
-                                                                      decoration:
-                                                                          BoxDecoration(
-                                                                        color:
-                                                                            itemColor,
-                                                                        borderRadius:
-                                                                            BorderRadius.circular(10),
-                                                                      ),
-                                                                      child:
-                                                                          Center(
+
+                                                                          Navigator.pop(
+                                                                              context);
+
+                                                                          showFlash(
+                                                                              context: context,
+                                                                              duration: const Duration(seconds: 2),
+                                                                              persistent: true,
+                                                                              builder: (_, controller) {
+                                                                                return Flash(
+                                                                                  margin: EdgeInsets.symmetric(horizontal: 20),
+                                                                                  borderRadius: BorderRadius.circular(20),
+                                                                                  controller: controller,
+                                                                                  backgroundColor: mainColor,
+                                                                                  barrierBlur: 13.0,
+                                                                                  barrierColor: Colors.black38,
+                                                                                  barrierDismissible: true,
+                                                                                  behavior: FlashBehavior.floating,
+                                                                                  position: FlashPosition.top,
+                                                                                  child: FlashBar(
+                                                                                      icon: Icon(Icons.info_outline, color: Colors.white),
+                                                                                      content: Text(
+                                                                                        "لقد  حذفت ${element.name}",
+                                                                                        style: TextStyle(fontSize: 12, color: Colors.white, fontFamily: 'Cairo'),
+                                                                                      ),
+                                                                                      primaryAction: TextButton(
+                                                                                          onPressed: () {
+                                                                                            bool exists = cart.any((file) => file.name == element.name);
+
+                                                                                            if (exists) {
+                                                                                            } else {
+                                                                                              setState(() {
+                                                                                                cart.add(element);
+                                                                                              });
+                                                                                            }
+                                                                                          },
+                                                                                          child: Text(
+                                                                                            'ارجاع المنتج',
+                                                                                            style: TextStyle(fontSize: 13, color: Colors.white),
+                                                                                          ))),
+                                                                                );
+                                                                              });
+                                                                        },
                                                                         child:
-                                                                            Text(
-                                                                          'تأكيد',
-                                                                          style:
-                                                                              TextStyle(color: mainColor),
+                                                                            Container(
+                                                                          padding: EdgeInsets.symmetric(
+                                                                              horizontal: 20,
+                                                                              vertical: 5),
+                                                                          decoration:
+                                                                              BoxDecoration(
+                                                                            color:
+                                                                                itemColor,
+                                                                            borderRadius:
+                                                                                BorderRadius.circular(10),
+                                                                          ),
+                                                                          child:
+                                                                              Center(
+                                                                            child:
+                                                                                Text(
+                                                                              'تأكيد',
+                                                                              style: TextStyle(color: mainColor),
+                                                                            ),
+                                                                          ),
                                                                         ),
                                                                       ),
-                                                                    ),
-                                                                  ),
+                                                                    ],
+                                                                  )
                                                                 ],
-                                                              )
-                                                            ],
+                                                              ),
+                                                            ),
                                                           ),
                                                         ),
                                                       ),
                                                     ),
-                                                  ),
-                                                ),
-                                              );
-                                            });
-                                          }
-                                        },
-                                        child: Material(
-                                          elevation: 10,
-                                          shadowColor: mainColor,
-                                          color: Colors.transparent,
-                                          borderRadius:
-                                              BorderRadius.circular(5),
-                                          child: Container(
-                                            padding: EdgeInsets.all(3),
-                                            decoration: BoxDecoration(
-                                              color: itemColor,
+                                                  );
+                                                });
+                                              }
+                                            },
+                                            child: Material(
+                                              elevation: 10,
+                                              shadowColor: mainColor,
+                                              color: Colors.transparent,
                                               borderRadius:
                                                   BorderRadius.circular(5),
-                                            ),
-                                            child: Icon(
-                                              Icons.remove,
-                                              size: 15,
-                                              color: mainColor,
+                                              child: Container(
+                                                padding: EdgeInsets.all(3),
+                                                decoration: BoxDecoration(
+                                                  color: itemColor,
+                                                  borderRadius:
+                                                      BorderRadius.circular(5),
+                                                ),
+                                                child: Icon(
+                                                  Icons.remove,
+                                                  size: 15,
+                                                  color: mainColor,
+                                                ),
+                                              ),
                                             ),
                                           ),
-                                        ),
+                                        ],
                                       ),
-                                    ],
+                                    ),
                                   ),
-                                ),
+                                ],
                               ),
-                            ],
-                          ),
-                        ),
-                      );
-                    })),
+                            ),
+                          );
+                        })),
             Row(
               children: [
                 Expanded(
