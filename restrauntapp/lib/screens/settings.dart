@@ -4,8 +4,11 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:restrauntapp/constants/constants.dart';
 import 'package:restrauntapp/screens/landingpage.dart';
+import 'package:restrauntapp/screens/orders.dart';
 import 'package:restrauntapp/screens/profile.dart';
+import 'package:restrauntapp/screens/tablebooking.dart';
 import 'package:restrauntapp/widgets/settinglist.dart';
 import 'package:restrauntapp/widgets/snackbar.dart';
 
@@ -26,9 +29,54 @@ class _SettingsPageState extends State<SettingsPage> {
   Widget build(BuildContext context) {
     return SafeArea(
       child: Container(
+        color: Colors.white,
         padding: EdgeInsets.symmetric(vertical: 10, horizontal: 20),
         child: Column(
           children: [
+            StreamBuilder(
+                stream: FirebaseFirestore.instance
+                    .collection('users')
+                    .doc(FirebaseAuth.instance.currentUser?.uid)
+                    .snapshots(),
+                builder: (context, snapshot) {
+                  if (snapshot.hasData) {
+                    return Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Text(
+                          'اهلا بك',
+                          style: TextStyle(
+                              color: mainColor, fontWeight: FontWeight.bold),
+                        ),
+                        VerticalDivider(
+                          color: Colors.transparent,
+                          width: 7,
+                        ),
+                        Text(
+                          (snapshot.data as dynamic)['firstname'] ?? '',
+                          style: TextStyle(
+                            color: mainColor,
+                          ),
+                        ),
+                        VerticalDivider(
+                          color: Colors.transparent,
+                          width: 5,
+                        ),
+                        Text(
+                          (snapshot.data as dynamic)['lastname'] ?? '',
+                          style: TextStyle(
+                            color: mainColor,
+                          ),
+                        ),
+                      ],
+                    );
+                  } else {
+                    return Container();
+                  }
+                }),
+            Divider(
+              color: Colors.transparent,
+            ),
             Container(
               child: StreamBuilder(
                 stream: FirebaseFirestore.instance
@@ -60,25 +108,6 @@ class _SettingsPageState extends State<SettingsPage> {
               children: [
                 SettingsList(
                   onTap: () async {
-                    await FirebaseAuth.instance.signOut();
-                    snackBarWidget(context, 'تم تسجيل الخروج بنجاج',
-                        Icons.check, Colors.white);
-                    setState(() {
-                      Navigator.pop(context);
-                      Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                              builder: (context) => LandingPage()));
-                    });
-                  },
-                  iconData: Icons.logout,
-                  title: 'تسجيل الخروج',
-                ),
-                Divider(
-                  color: Colors.transparent,
-                ),
-                SettingsList(
-                  onTap: () async {
                     Navigator.push(
                         context,
                         MaterialPageRoute(
@@ -91,8 +120,60 @@ class _SettingsPageState extends State<SettingsPage> {
                   iconData: CupertinoIcons.profile_circled,
                   title: 'تعديل معلوماتي',
                 ),
+                Divider(
+                  color: Colors.transparent,
+                ),
+                SettingsList(
+                  onTap: () async {
+                    Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) => TableBooking(
+                                  image:
+                                      'https://images.unsplash.com/photo-1502749793729-68bfc5666aaa?ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&ixlib=rb-1.2.1&auto=format&fit=crop&w=3300&q=80',
+                                  title: 'هل تريد حجز طاولة؟',
+                                  sub: 'اضغط هنا لكي تحجز الآن',
+                                )));
+                  },
+                  iconData: CupertinoIcons.clock,
+                  title: 'حجز طاولة',
+                ),
+                Divider(
+                  color: Colors.transparent,
+                ),
+                SettingsList(
+                  onTap: () async {
+                    Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) => PreviousOrders()));
+                  },
+                  iconData: CupertinoIcons.bag,
+                  title: 'طلباتي السابقة',
+                ),
+                Divider(
+                  color: Colors.transparent,
+                ),
+                SettingsList(
+                  onTap: () async {
+                    await FirebaseAuth.instance.signOut();
+                    snackBarWidget(context, 'تم تسجيل الخروج بنجاج',
+                        Icons.check, Colors.white);
+                    setState(
+                      () {
+                        Navigator.pushAndRemoveUntil(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) => LandingPage()),
+                            (route) => false);
+                      },
+                    );
+                  },
+                  iconData: Icons.logout,
+                  title: 'تسجيل الخروج',
+                ),
               ],
-            ))
+            )),
           ],
         ),
       ),

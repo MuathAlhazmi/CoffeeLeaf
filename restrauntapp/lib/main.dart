@@ -1,6 +1,8 @@
 import 'dart:ui';
 
+import 'package:animated_splash_screen/animated_splash_screen.dart';
 import 'package:carousel_slider/carousel_slider.dart';
+import 'package:dot_navigation_bar/dot_navigation_bar.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/cupertino.dart';
@@ -8,6 +10,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:flutter_staggered_animations/flutter_staggered_animations.dart';
+import 'package:page_transition/page_transition.dart';
 import 'package:restrauntapp/constants/constants.dart';
 import 'package:restrauntapp/data/data.dart';
 import 'package:restrauntapp/screens/cart.dart';
@@ -15,7 +18,6 @@ import 'package:restrauntapp/screens/homepage.dart';
 import 'package:restrauntapp/screens/landingpage.dart';
 import 'package:restrauntapp/screens/search.dart';
 import 'package:restrauntapp/screens/settings.dart';
-import 'package:restrauntapp/widgets/navbar.dart';
 import 'package:shimmer/shimmer.dart';
 
 void main() async {
@@ -49,7 +51,28 @@ class MyApp extends StatelessWidget {
           primarySwatch: colorCustom,
           fontFamily: 'Cairo',
         ),
-        home: LandingPage());
+        home: AnimatedSplashScreen(
+          curve: Curves.easeInOut,
+          animationDuration: Duration(seconds: 2),
+          duration: 3000,
+          splash: Material(
+            color: Colors.transparent,
+            elevation: 20,
+            shadowColor: mainColor,
+            borderRadius: BorderRadius.circular(20),
+            child: ClipRRect(
+              borderRadius: BorderRadius.circular(10),
+              child: Image.asset(
+                'assets/images/logo.png',
+              ),
+            ),
+          ),
+          nextScreen: LandingPage(),
+          splashTransition: SplashTransition.slideTransition,
+          backgroundColor: itemColor,
+          pageTransitionType: PageTransitionType.rightToLeft,
+          centered: true,
+        ));
   }
 }
 
@@ -62,10 +85,12 @@ class _LoadingListPageState extends State<LoadingListPage> {
   bool enabled = true;
   @override
   void initState() {
-    Future.delayed(Duration(seconds: 6), () {
-      setState(() {
-        enabled = false;
-      });
+    Future.delayed(Duration(seconds: 3), () {
+      if (mounted) {
+        setState(() {
+          enabled = false;
+        });
+      }
     });
     super.initState();
   }
@@ -85,26 +110,62 @@ class _LoadingListPageState extends State<LoadingListPage> {
           ],
               colors: [
             currentIndex1 == 0 ? mainColor : Colors.white,
-            mainColor
+            currentIndex1 == 0 ? itemColor : Colors.white,
           ])),
       child: SafeArea(
         child: Scaffold(
-          bottomNavigationBar: CustomBottomNavigationBar(
+          extendBody: true,
+          bottomNavigationBar: DotNavigationBar(
+            borderRadius: 20,
+            duration: Duration(milliseconds: 250),
+            curve: Curves.easeInOut,
+            paddingR: EdgeInsets.symmetric(vertical: 20, horizontal: 20),
+            itemPadding: EdgeInsets.symmetric(horizontal: 0, vertical: 0),
+            boxShadow: [
+              BoxShadow(
+                color: mainColor.withOpacity(.7),
+                offset: Offset(4, 8), // Shadow position
+                spreadRadius: 0,
+                blurRadius: 20,
+              )
+            ],
+            backgroundColor: mainColor,
             currentIndex: currentIndex1,
-            onChange: (index) {
+            dotIndicatorColor: itemColor,
+            onTap: (index) {
+              if (index == 0) {
+                // showNotification();
+                setState(() {
+                  currentIndex1 = index;
+                });
+              }
               setState(() {
                 currentIndex1 = index;
               });
             },
-            children: [
-              CustomBottomNavigationItem(
-                  icon: CupertinoIcons.home, color: Colors.white),
-              CustomBottomNavigationItem(
-                  icon: CupertinoIcons.search, color: Colors.white),
-              CustomBottomNavigationItem(
-                  icon: CupertinoIcons.person_circle, color: Colors.white),
-              CustomBottomNavigationItem(
-                  icon: CupertinoIcons.cart, color: Colors.white),
+            items: [
+              DotNavigationBarItem(
+                  icon: Icon(CupertinoIcons.home),
+                  unselectedColor: itemColor.withOpacity(.5),
+                  selectedColor: itemColor),
+              DotNavigationBarItem(
+                  icon: Icon(
+                    CupertinoIcons.search,
+                  ),
+                  unselectedColor: itemColor.withOpacity(.5),
+                  selectedColor: itemColor),
+              DotNavigationBarItem(
+                  icon: Icon(
+                    CupertinoIcons.person_circle,
+                  ),
+                  unselectedColor: itemColor.withOpacity(.5),
+                  selectedColor: itemColor),
+              DotNavigationBarItem(
+                  icon: Icon(
+                    CupertinoIcons.cart,
+                  ),
+                  unselectedColor: itemColor.withOpacity(.5),
+                  selectedColor: itemColor),
             ],
           ),
           body: currentIndex1 == 0
@@ -116,7 +177,10 @@ class _LoadingListPageState extends State<LoadingListPage> {
                       enabled: enabled,
                     )
                   : currentIndex1 == 2
-                      ? SettingsPage()
+                      ? Container(
+                          child: SettingsPage(),
+                          color: Colors.white,
+                        )
                       : CartScreens(),
         ),
       ),
@@ -150,21 +214,28 @@ class Shimmering extends StatelessWidget {
             childAspectRatio: 0.7),
         physics: NeverScrollableScrollPhysics(),
         itemBuilder: (context, index) => AnimationLimiter(
-          child: AnimationConfiguration.staggeredGrid(
-            columnCount: 3,
-            position: index,
-            child: GestureDetector(
-              onTap: () {},
-              child: Container(
-                height: 100,
-                decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(10),
-                  color: Colors.white,
-                ),
-                child: Row(
-                  children: [
-                    Text(''),
-                  ],
+          child: AnimationLimiter(
+            child: AnimationConfiguration.staggeredList(
+              position: index,
+              duration: const Duration(milliseconds: 500),
+              delay: Duration(milliseconds: 200),
+              child: ScaleAnimation(
+                child: FadeInAnimation(
+                  child: GestureDetector(
+                    onTap: () {},
+                    child: Container(
+                      height: 100,
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(10),
+                        color: Colors.white,
+                      ),
+                      child: Row(
+                        children: [
+                          Text(''),
+                        ],
+                      ),
+                    ),
+                  ),
                 ),
               ),
             ),

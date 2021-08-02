@@ -85,8 +85,13 @@ class _LandingPageState extends State<LandingPage> {
             Row(
               children: [
                 Expanded(
-                  child: GestureDetector(
-                    onTap: () {
+                  child: ElevatedButton(
+                    style: ElevatedButton.styleFrom(
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(10),
+                      ),
+                    ),
+                    onPressed: () {
                       if (Platform.isIOS) {
                         if (FirebaseAuth.instance.currentUser != null) {
                           print(FirebaseAuth.instance.currentUser!.uid);
@@ -130,19 +135,11 @@ class _LandingPageState extends State<LandingPage> {
                         }
                       }
                     },
-                    child: Container(
-                      padding:
-                          EdgeInsets.symmetric(horizontal: 20, vertical: 5),
-                      decoration: BoxDecoration(
-                        color: mainColor,
-                        borderRadius: BorderRadius.circular(10),
-                      ),
-                      child: Center(
-                        child: Text(
-                          'ابدأ بالطلب',
-                          style: TextStyle(
-                            color: Colors.white,
-                          ),
+                    child: Center(
+                      child: Text(
+                        'ابدأ بالطلب',
+                        style: TextStyle(
+                          color: Colors.white,
                         ),
                       ),
                     ),

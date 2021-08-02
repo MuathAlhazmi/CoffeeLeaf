@@ -18,11 +18,13 @@ class _SearchPageState extends State<SearchPage> {
   @override
   Widget build(BuildContext context) {
     return Container(
+      color: Colors.white,
       padding: EdgeInsets.symmetric(horizontal: 20, vertical: 10),
       child: DefaultTabController(
         length: 3,
         child: Column(children: <Widget>[
           TabBar(
+            enableFeedback: true,
             indicatorSize: TabBarIndicatorSize.tab,
             indicator: CircleTabIndicator(color: mainColor, radius: 4),
             isScrollable: true,
@@ -31,16 +33,16 @@ class _SearchPageState extends State<SearchPage> {
                 TextStyle(color: Colors.black, fontFamily: 'Cairo'),
             labelStyle: TextStyle(color: mainColor, fontFamily: 'Cairo'),
             labelColor: mainColor,
-            unselectedLabelColor: mainColor.withOpacity(.5),
+            unselectedLabelColor: mainColor.withOpacity(.4),
             tabs: [
               Tab(
-                text: "القهوة السوداء",
+                text: "القهوة بالحليب",
               ),
               Tab(
                 text: "القهوة المثلجة",
               ),
               Tab(
-                text: "القهوة بالحليب",
+                text: "القهوة السوداء",
               ),
             ],
           ),
@@ -96,7 +98,7 @@ class _SearchPageState extends State<SearchPage> {
                     price: 21,
                     image:
                         'https://cdnimg.webstaurantstore.com/uploads/blog/2019/4/coffee-drinks_iced-coffee.jpg',
-                    name: 'القهوة المثلج',
+                    name: 'القهوة المثلجة',
                     quantity: 0),
                 Item(
                     itemID: '11132234432134432',

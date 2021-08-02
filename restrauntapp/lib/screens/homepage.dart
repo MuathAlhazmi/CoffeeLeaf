@@ -25,7 +25,6 @@ class HomePage extends StatefulWidget {
 class _HomePageState extends State<HomePage> {
   int pageIndex = 0;
   final CarouselController _controller = CarouselController();
-
   @override
   Widget build(BuildContext context) {
     List<Widget> carouselWidgets = [
@@ -219,36 +218,46 @@ class _HomePageState extends State<HomePage> {
     return NestedScrollView(
       headerSliverBuilder: (BuildContext context, bool innerBoxIsScrolled) {
         return <Widget>[
-          SliverSafeArea(
-            sliver: SliverAppBar(
-              elevation: 10,
-              shadowColor: mainColor,
-              leadingWidth: 65,
-              leading: Padding(
+          SliverAppBar(
+            elevation: 10,
+            shadowColor: mainColor,
+            leadingWidth: 65,
+            leading: Hero(
+              tag: 'Back',
+              child: Padding(
                 padding: const EdgeInsets.all(8.0),
-                child: GestureDetector(
-                  onTap: () {
-                    Navigator.of(context).maybePop();
-                  },
-                  child: Container(
-                    height: 50,
-                    width: 50,
-                    decoration: BoxDecoration(
-                      color: mainColor,
+                child: ElevatedButton(
+                  style: ElevatedButton.styleFrom(
+                    elevation: 0,
+                    fixedSize: Size(50, 50),
+                    shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(10),
                     ),
-                    child: Icon(
-                      CupertinoIcons.arrow_right,
-                      size: 15,
-                    ),
+                  ),
+                  onPressed: () {
+                    Navigator.of(context).maybePop();
+                  },
+                  child: Icon(
+                    CupertinoIcons.arrow_right,
+                    size: 15,
                   ),
                 ),
               ),
-              actions: [
-                Padding(
+            ),
+            actions: [
+              Hero(
+                tag: 'Cart',
+                child: Padding(
                   padding: const EdgeInsets.all(8.0),
-                  child: GestureDetector(
-                    onTap: () {
+                  child: ElevatedButton(
+                    style: ElevatedButton.styleFrom(
+                      elevation: 0,
+                      fixedSize: Size(50, 50),
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(10),
+                      ),
+                    ),
+                    onPressed: () {
                       Navigator.push(
                         context,
                         MaterialPageRoute(
@@ -258,85 +267,75 @@ class _HomePageState extends State<HomePage> {
                         ),
                       );
                     },
-                    child: Container(
-                      height: 50,
-                      width: 50,
-                      decoration: BoxDecoration(
-                        color: mainColor,
-                        borderRadius: BorderRadius.circular(10),
-                      ),
-                      child: Icon(
-                        CupertinoIcons.shopping_cart,
-                        size: 15,
-                      ),
+                    child: Icon(
+                      CupertinoIcons.shopping_cart,
+                      size: 15,
                     ),
                   ),
                 ),
-              ],
-              automaticallyImplyLeading: false,
-              shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.vertical(
-                  bottom: Radius.circular(20),
-                ),
               ),
-              expandedHeight: MediaQuery.of(context).size.height * 0.2,
-              floating: false,
-              pinned: true,
+            ],
+            automaticallyImplyLeading: false,
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.vertical(
+                bottom: Radius.circular(20),
+              ),
+            ),
+            expandedHeight: MediaQuery.of(context).size.height * 0.2,
+            floating: false,
+            pinned: true,
+            centerTitle: true,
+            title: FutureBuilder(
+                future: printUrl1(),
+                builder: (context, snapshot) {
+                  if (snapshot.hasData) {
+                    return AnimatedOpacity(
+                      opacity: innerBoxIsScrolled ? 1 : 0,
+                      duration: Duration(milliseconds: 100),
+                      child: ClipRRect(
+                        borderRadius: BorderRadius.circular(20),
+                        child: CachedNetworkImage(
+                          height: kToolbarHeight,
+                          imageUrl: snapshot.data.toString(),
+                          progressIndicatorBuilder:
+                              (context, url, downloadProgress) => Container(),
+                          errorWidget: (context, url, error) => Icon(
+                            Icons.error,
+                            color: Colors.white,
+                          ),
+                          fit: BoxFit.contain,
+                        ),
+                      ),
+                    );
+                  } else {
+                    return Container();
+                  }
+                }),
+            flexibleSpace: FlexibleSpaceBar(
               centerTitle: true,
-              title: FutureBuilder(
+              background: FutureBuilder(
                   future: printUrl1(),
                   builder: (context, snapshot) {
                     if (snapshot.hasData) {
-                      return AnimatedOpacity(
-                        opacity: innerBoxIsScrolled ? 1 : 0,
-                        duration: Duration(milliseconds: 500),
-                        child: ClipRRect(
-                          borderRadius: BorderRadius.circular(20),
-                          child: CachedNetworkImage(
-                            height: kToolbarHeight,
-                            imageUrl: snapshot.data.toString(),
-                            progressIndicatorBuilder:
-                                (context, url, downloadProgress) =>
-                                    CupertinoActivityIndicator(radius: 10),
-                            errorWidget: (context, url, error) => Icon(
-                              Icons.error,
-                              color: Colors.white,
-                            ),
-                            fit: BoxFit.contain,
+                      return ClipRRect(
+                        borderRadius: BorderRadius.circular(20),
+                        child: CachedNetworkImage(
+                          height: 100,
+                          width: 100,
+                          imageUrl: snapshot.data.toString(),
+                          progressIndicatorBuilder:
+                              (context, url, downloadProgress) => Container(),
+                          errorWidget: (context, url, error) => Icon(
+                            Icons.error,
+                            color: Colors.white,
                           ),
+                          fit: BoxFit.contain,
                         ),
                       );
                     } else {
-                      return CupertinoActivityIndicator();
+                      return Container();
                     }
                   }),
-              flexibleSpace: FlexibleSpaceBar(
-                centerTitle: true,
-                background: FutureBuilder(
-                    future: printUrl1(),
-                    builder: (context, snapshot) {
-                      if (snapshot.hasData) {
-                        return ClipRRect(
-                          borderRadius: BorderRadius.circular(20),
-                          child: CachedNetworkImage(
-                            height: 100,
-                            width: 100,
-                            imageUrl: snapshot.data.toString(),
-                            progressIndicatorBuilder:
-                                (context, url, downloadProgress) =>
-                                    CupertinoActivityIndicator(radius: 10),
-                            errorWidget: (context, url, error) => Icon(
-                              Icons.error,
-                              color: Colors.white,
-                            ),
-                            fit: BoxFit.contain,
-                          ),
-                        );
-                      } else {
-                        return CupertinoActivityIndicator();
-                      }
-                    }),
-              ),
             ),
           ),
         ];
@@ -344,200 +343,190 @@ class _HomePageState extends State<HomePage> {
       body: Container(
         color: itemColor,
         width: double.infinity,
-        child: Column(
-          mainAxisSize: MainAxisSize.max,
-          children: <Widget>[
-            widget.enabled
-                ? Padding(
-                    padding: const EdgeInsets.symmetric(vertical: 10),
-                    child: ShimmeringCarousel(
-                      enabled: widget.enabled,
-                    ),
-                  )
-                : Padding(
-                    padding: const EdgeInsets.symmetric(vertical: 10),
-                    child: CarouselSlider(
-                        carouselController: _controller,
-                        options: CarouselOptions(
-                          enableInfiniteScroll: false,
-                          viewportFraction: 0.7,
-                          height: 220.0,
-                          autoPlay: true,
-                          enlargeCenterPage: true,
-                          autoPlayInterval: Duration(seconds: 3),
-                          autoPlayAnimationDuration:
-                              Duration(milliseconds: 500),
-                          autoPlayCurve: Curves.easeInOut,
-                          pauseAutoPlayOnTouch: true,
-                          aspectRatio: 2.0,
-                          onPageChanged: (index, reason) {
-                            setState(() {
-                              pageIndex = index;
-                            });
-                          },
-                        ),
-                        items: carouselWidgets),
+        child: Column(mainAxisSize: MainAxisSize.max, children: <Widget>[
+          Divider(
+            color: Colors.transparent,
+          ),
+          widget.enabled
+              ? Padding(
+                  padding: const EdgeInsets.symmetric(vertical: 10),
+                  child: ShimmeringCarousel(
+                    enabled: widget.enabled,
                   ),
-            Divider(
-              color: Colors.transparent,
-            ),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: carouselWidgets.asMap().entries.map((entry) {
-                return GestureDetector(
-                  onTap: () => _controller.animateToPage(
-                    entry.key,
-                    duration: Duration(milliseconds: 500),
-                    curve: Curves.easeInOut,
-                  ),
-                  child: AnimatedContainer(
-                    duration: Duration(milliseconds: 500),
-                    width: 20.0,
-                    height: 12.0,
-                    margin:
-                        EdgeInsets.symmetric(vertical: 8.0, horizontal: 4.0),
-                    decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(10),
-                        color: mainColor
-                            .withOpacity(pageIndex == entry.key ? 0.9 : 0.5)),
-                  ),
-                );
-              }).toList(),
-            ),
-            Divider(
-              color: Colors.transparent,
-            ),
-
-            // Padding(
-            //   padding: const EdgeInsets.symmetric(horizontal: 10),
-            //   child: Row(
-            //     children: [
-            //       Expanded(
-            //         child: TextFieldWidget(
-            //           labeltext: 'البحث',
-            //           textController: search,
-            //           hinttext: 'قم بالبحث هنا',
-            //           onchanged: (text) {
-            //             searchResult.clear();
-            //             if (text.isEmpty) {
-            //               setState(() {});
-            //               return;
-            //             }
-            //             if (searchResult.length == 0) {}
-            //             items.forEach((item) {
-            //               if (item.name.contains(text)) searchResult.add(item);
-            //             });
-
-            //             setState(() {});
-            //           },
-            //         ),
-            //       ),
-            //     ],
-            //   ),
-            // ),
-            Expanded(
-              child: Container(
-                  padding: const EdgeInsets.symmetric(
-                    horizontal: 30.0,
-                  ),
+                )
+              : Padding(
+                  padding: const EdgeInsets.symmetric(vertical: 10),
+                  child: CarouselSlider(
+                      carouselController: _controller,
+                      options: CarouselOptions(
+                        enableInfiniteScroll: false,
+                        viewportFraction: 0.7,
+                        height: 220.0,
+                        autoPlay: true,
+                        enlargeCenterPage: true,
+                        autoPlayInterval: Duration(seconds: 3),
+                        autoPlayAnimationDuration: Duration(milliseconds: 500),
+                        autoPlayCurve: Curves.easeInOut,
+                        pauseAutoPlayOnTouch: true,
+                        aspectRatio: 2.0,
+                        onPageChanged: (index, reason) {
+                          setState(() {
+                            pageIndex = index;
+                          });
+                        },
+                      ),
+                      items: carouselWidgets),
+                ),
+          Divider(
+            color: Colors.transparent,
+          ),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: carouselWidgets.asMap().entries.map((entry) {
+              return GestureDetector(
+                onTap: () => _controller.animateToPage(
+                  entry.key,
+                  duration: Duration(milliseconds: 500),
+                  curve: Curves.easeInOut,
+                ),
+                child: AnimatedContainer(
+                  duration: Duration(milliseconds: 500),
+                  width: 20.0,
+                  height: 12.0,
+                  margin: EdgeInsets.symmetric(vertical: 8.0, horizontal: 4.0),
                   decoration: BoxDecoration(
-                    color: itemColor,
-                    borderRadius: BorderRadius.circular(10),
-                  ),
-                  child: widget.enabled
-                      ? Shimmering(enabled: widget.enabled)
-                      : Column(
-                          children: [
-                            Expanded(
-                              child: GridView.builder(
-                                gridDelegate:
-                                    SliverGridDelegateWithFixedCrossAxisCount(
-                                        crossAxisCount: 3,
-                                        mainAxisSpacing: 10,
-                                        crossAxisSpacing: 10,
-                                        childAspectRatio: 0.7),
-                                // physics: NeverScrollableScrollPhysics(),
-                                itemCount: items.length,
-                                itemBuilder: (context, index) =>
-                                    AnimationLimiter(
-                                  child: AnimationConfiguration.staggeredGrid(
-                                    columnCount: 3,
-                                    position: index,
+                      borderRadius: BorderRadius.circular(10),
+                      color: mainColor
+                          .withOpacity(pageIndex == entry.key ? 0.9 : 0.5)),
+                ),
+              );
+            }).toList(),
+          ),
+          Divider(
+            color: Colors.transparent,
+          ),
+
+          // Padding(
+          //   padding: const EdgeInsets.symmetric(horizontal: 10),
+          //   child: Row(
+          //     children: [
+          //       Expanded(
+          //         child: TextFieldWidget(
+          //           labeltext: 'البحث',
+          //           textController: search,
+          //           hinttext: 'قم بالبحث هنا',
+          //           onchanged: (text) {
+          //             searchResult.clear();
+          //             if (text.isEmpty) {
+          //               setState(() {});
+          //               return;
+          //             }
+          //             if (searchResult.length == 0) {}
+          //             items.forEach((item) {
+          //               if (item.name.contains(text)) searchResult.add(item);
+          //             });
+
+          //             setState(() {});
+          //           },
+          //         ),
+          //       ),
+          //     ],
+          //   ),
+          // ),
+          Expanded(
+            child: Container(
+              padding: const EdgeInsets.symmetric(
+                horizontal: 30.0,
+              ),
+              decoration: BoxDecoration(
+                color: itemColor,
+                borderRadius: BorderRadius.circular(10),
+              ),
+              // child: widget.enabled
+              //     ? Shimmering(enabled: widget.enabled)
+              child: widget.enabled
+                  ? Shimmering(enabled: widget.enabled)
+                  : Column(children: [
+                      Expanded(
+                        child: GridView.builder(
+                          gridDelegate:
+                              SliverGridDelegateWithFixedCrossAxisCount(
+                                  crossAxisCount: 3,
+                                  mainAxisSpacing: 10,
+                                  crossAxisSpacing: 10,
+                                  childAspectRatio: 0.7),
+                          // physics: NeverScrollableScrollPhysics(),
+                          itemCount: items.length,
+                          itemBuilder: (context, index) => AnimationLimiter(
+                            child: AnimationLimiter(
+                              child: AnimationConfiguration.staggeredList(
+                                position: index,
+                                duration: const Duration(milliseconds: 500),
+                                delay: Duration(milliseconds: 200),
+                                child: ScaleAnimation(
+                                  child: FadeInAnimation(
                                     child: Container(
-                                      height: 100,
-                                      padding: EdgeInsets.all(7),
                                       decoration: BoxDecoration(
+                                        border: Border.all(
+                                            color: mainColor, width: 2),
+                                        color: itemColor,
                                         borderRadius: BorderRadius.circular(10),
-                                        color: mainColor,
                                       ),
-                                      child: Container(
-                                        decoration: BoxDecoration(
-                                          color: itemColor,
-                                          borderRadius:
-                                              BorderRadius.circular(10),
-                                        ),
-                                        child: GestureDetector(
-                                          onTap: () {
-                                            Navigator.push(
-                                                context,
-                                                MaterialPageRoute(
-                                                    builder: (context) =>
-                                                        DetailScreen(
-                                                            itemID: items[index]
-                                                                .itemID,
-                                                            description: items[
-                                                                    index]
-                                                                .description,
-                                                            price: items[index]
-                                                                .price,
-                                                            image: items[index]
-                                                                .image,
-                                                            name: items[index]
-                                                                .name,
-                                                            quantity: items[
-                                                                    index]
-                                                                .quantity)));
-                                          },
-                                          child: Column(
-                                            mainAxisAlignment:
-                                                MainAxisAlignment.spaceAround,
-                                            children: [
-                                              Expanded(
-                                                  child: Hero(
-                                                tag: items[index].name,
+                                      child: GestureDetector(
+                                        onTap: () {
+                                          Navigator.push(
+                                              context,
+                                              MaterialPageRoute(
+                                                  builder: (context) =>
+                                                      DetailScreen(
+                                                          itemID: items[index]
+                                                              .itemID,
+                                                          description:
+                                                              items[index]
+                                                                  .description,
+                                                          price: items[index]
+                                                              .price,
+                                                          image: items[index]
+                                                              .image,
+                                                          name:
+                                                              items[index].name,
+                                                          quantity: items[index]
+                                                              .quantity)));
+                                        },
+                                        child: Column(
+                                          mainAxisAlignment:
+                                              MainAxisAlignment.spaceAround,
+                                          children: [
+                                            Expanded(
                                                 child: ClipRRect(
-                                                  borderRadius:
-                                                      BorderRadius.circular(20),
-                                                  child: CachedNetworkImage(
-                                                    imageUrl:
-                                                        items[index].image,
-                                                    progressIndicatorBuilder: (context,
-                                                            url,
-                                                            downloadProgress) =>
-                                                        CupertinoActivityIndicator(
-                                                            radius: 10),
-                                                    errorWidget:
-                                                        (context, url, error) =>
-                                                            Icon(
-                                                      Icons.error,
-                                                      color: Colors.white,
-                                                    ),
-                                                    fit: BoxFit.cover,
-                                                  ),
+                                              borderRadius:
+                                                  BorderRadius.circular(20),
+                                              child: CachedNetworkImage(
+                                                imageUrl: items[index].image,
+                                                progressIndicatorBuilder: (context,
+                                                        url,
+                                                        downloadProgress) =>
+                                                    CupertinoActivityIndicator(
+                                                        radius: 10),
+                                                errorWidget:
+                                                    (context, url, error) =>
+                                                        Icon(
+                                                  Icons.error,
+                                                  color: Colors.white,
                                                 ),
-                                              )),
-                                              Text(
-                                                items[index].name,
-                                                overflow: TextOverflow.ellipsis,
+                                                fit: BoxFit.cover,
                                               ),
-                                              Directionality(
-                                                textDirection:
-                                                    TextDirection.ltr,
-                                                child: Text(
-                                                    '${items[index].price.toString()} SAR'),
-                                              ),
-                                            ],
-                                          ),
+                                            )),
+                                            Text(
+                                              items[index].name,
+                                              overflow: TextOverflow.ellipsis,
+                                            ),
+                                            Directionality(
+                                              textDirection: TextDirection.rtl,
+                                              child: Text(
+                                                  '${items[index].price.toString()} ريال'),
+                                            ),
+                                          ],
                                         ),
                                       ),
                                     ),
@@ -545,11 +534,13 @@ class _HomePageState extends State<HomePage> {
                                 ),
                               ),
                             ),
-                          ],
-                        )),
+                          ),
+                        ),
+                      ),
+                    ]),
             ),
-          ],
-        ),
+          )
+        ]),
       ),
     );
   }

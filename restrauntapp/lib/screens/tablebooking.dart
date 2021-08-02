@@ -46,23 +46,26 @@ class _TableBookingState extends State<TableBooking> {
               child: Column(children: [
                 Row(
                   children: [
-                    Padding(
-                      padding: const EdgeInsets.all(8.0),
-                      child: GestureDetector(
-                        onTap: () {
-                          Navigator.of(context).maybePop();
-                        },
-                        child: Container(
-                          height: 50,
-                          width: 50,
-                          decoration: BoxDecoration(
-                            color: mainColor,
-                            borderRadius: BorderRadius.circular(10),
-                          ),
-                          child: Icon(
-                            CupertinoIcons.arrow_right,
-                            color: Colors.white,
-                            size: 15,
+                    Hero(
+                      tag: 'Back',
+                      child: Padding(
+                        padding: const EdgeInsets.all(8.0),
+                        child: GestureDetector(
+                          onTap: () {
+                            Navigator.of(context).maybePop();
+                          },
+                          child: Container(
+                            height: 50,
+                            width: 50,
+                            decoration: BoxDecoration(
+                              color: mainColor,
+                              borderRadius: BorderRadius.circular(10),
+                            ),
+                            child: Icon(
+                              CupertinoIcons.arrow_right,
+                              color: Colors.white,
+                              size: 15,
+                            ),
                           ),
                         ),
                       ),
@@ -219,7 +222,7 @@ class _TableBookingState extends State<TableBooking> {
                           ).buildPage(context, _, __),
                         );
                       },
-                      transitionDuration: Duration(milliseconds: 200),
+                      transitionDuration: Duration(milliseconds: 500),
                       transitionsBuilder: (context, anim, secondAnim, child) =>
                           SlideTransition(
                         position: anim.drive(
@@ -283,8 +286,14 @@ class _TableBookingState extends State<TableBooking> {
                 Row(
                   children: [
                     Expanded(
-                        child: GestureDetector(
-                            onTap: () {
+                        child: ElevatedButton(
+                            style: ElevatedButton.styleFrom(
+                              onPrimary: Colors.white38,
+                              shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(10),
+                              ),
+                            ),
+                            onPressed: () {
                               snackBarWidget(
                                 context,
                                 'تم الحجز بنجاح',
@@ -293,18 +302,10 @@ class _TableBookingState extends State<TableBooking> {
                               );
                               Navigator.pop(context);
                             },
-                            child: Container(
-                              padding: EdgeInsets.symmetric(
-                                  horizontal: 20, vertical: 5),
-                              decoration: BoxDecoration(
-                                color: mainColor,
-                                borderRadius: BorderRadius.circular(10),
-                              ),
-                              child: Center(
-                                child: Text(
-                                  'حجز طاولة',
-                                  style: TextStyle(color: itemColor),
-                                ),
+                            child: Center(
+                              child: Text(
+                                'حجز طاولة',
+                                style: TextStyle(color: itemColor),
                               ),
                             )))
                   ],

@@ -20,7 +20,7 @@ int currentIndex1 = 0;
 MaterialColor colorCustom = MaterialColor(0xFF495E79, color);
 List<Item> favourite = [];
 List<Item> searchResult = [];
-
+ValueNotifier<bool> isSeen = ValueNotifier<bool>(true);
 List<Item> items = [
   Item(
       itemID: '11132234432134432',
@@ -74,7 +74,7 @@ List<Item> items = [
       price: 21,
       image:
           'https://cdnimg.webstaurantstore.com/uploads/blog/2019/4/coffee-drinks_iced-coffee.jpg',
-      name: 'القهوة المثلج',
+      name: 'القهوة المثلجة',
       quantity: 0),
   Item(
       itemID: '39402749274974',

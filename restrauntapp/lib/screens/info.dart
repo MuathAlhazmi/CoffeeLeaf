@@ -32,23 +32,33 @@ class InfoPage extends StatelessWidget {
               children: [
                 Row(
                   children: [
-                    Padding(
-                      padding: const EdgeInsets.all(8.0),
-                      child: GestureDetector(
-                        onTap: () {
-                          Navigator.of(context).maybePop();
-                        },
-                        child: Container(
-                          height: 50,
-                          width: 50,
-                          decoration: BoxDecoration(
-                            color: mainColor,
-                            borderRadius: BorderRadius.circular(10),
+                    Hero(
+                      tag: 'Back',
+                      child: Padding(
+                        padding: const EdgeInsets.all(8.0),
+                        child: ElevatedButton(
+                          style: ElevatedButton.styleFrom(
+                            elevation: 0,
+                            fixedSize: Size(50, 50),
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(10),
+                            ),
                           ),
-                          child: Icon(
-                            CupertinoIcons.arrow_right,
-                            color: Colors.white,
-                            size: 15,
+                          onPressed: () {
+                            Navigator.of(context).maybePop();
+                          },
+                          child: Container(
+                            height: 50,
+                            width: 50,
+                            decoration: BoxDecoration(
+                              color: mainColor,
+                              borderRadius: BorderRadius.circular(10),
+                            ),
+                            child: Icon(
+                              CupertinoIcons.arrow_right,
+                              color: Colors.white,
+                              size: 15,
+                            ),
                           ),
                         ),
                       ),
@@ -95,135 +105,73 @@ class InfoPage extends StatelessWidget {
                   ),
                 ),
                 Divider(
-                  color: Colors.transparent,
-                  height: 30,
-                ),
-                Material(
-                  elevation: 10,
-                  borderRadius: BorderRadius.circular(10),
-                  shadowColor: mainColor,
-                  child: Container(
-                    padding: EdgeInsets.all(10),
-                    decoration: BoxDecoration(
-                      color: mainColor,
-                      borderRadius: BorderRadius.circular(10),
-                    ),
-                    child: Column(
-                      children: [
-                        Row(
-                          children: [
-                            Expanded(
-                              child: FittedBox(
-                                child: Text(
-                                  content.first,
-                                  style: TextStyle(
-                                      color: itemColor,
-                                      fontWeight: FontWeight.bold),
-                                ),
-                              ),
-                            ),
-                            Expanded(
-                              child: Icon(
-                                iconDataList.first,
-                                color: itemColor,
-                              ),
-                            ),
-                            Expanded(
-                              child: VerticalDivider(
-                                color: Colors.transparent,
-                              ),
-                            ),
-                          ],
-                        ),
-                        Text(
-                          contentTitle.first,
-                          style: TextStyle(
-                            color: itemColor,
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
-                ),
-                Divider(
-                  color: Colors.transparent,
+                  thickness: 2,
+                  color: mainColor,
                   height: 30,
                 ),
                 Container(
-                  child: Material(
-                    elevation: 10,
+                  padding: EdgeInsets.all(10),
+                  decoration: BoxDecoration(
                     borderRadius: BorderRadius.circular(10),
-                    shadowColor: mainColor,
-                    child: Container(
-                      padding: EdgeInsets.all(10),
-                      decoration: BoxDecoration(
-                        color: mainColor,
-                        borderRadius: BorderRadius.circular(10),
-                      ),
-                      child: Column(
+                  ),
+                  child: Column(
+                    children: [
+                      Row(
                         children: [
-                          Row(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: [
-                              Expanded(
-                                child: FittedBox(
-                                  child: Text(
-                                    content[1],
-                                    style: TextStyle(
-                                        color: itemColor,
-                                        fontSize: 20,
-                                        fontWeight: FontWeight.bold),
-                                  ),
-                                ),
+                          Expanded(
+                            child: FittedBox(
+                              child: Text(
+                                content.first,
+                                style: TextStyle(
+                                    color: mainColor,
+                                    fontWeight: FontWeight.bold),
                               ),
-                              Expanded(
-                                child: Icon(
-                                  iconDataList[1],
-                                  color: itemColor,
-                                ),
-                              ),
-                              Expanded(
-                                child: VerticalDivider(
-                                  color: Colors.transparent,
-                                ),
-                              ),
-                            ],
+                            ),
                           ),
-                          Text(
-                            contentTitle[1],
-                            style: TextStyle(
-                              color: itemColor,
+                          Expanded(
+                            child: Icon(
+                              iconDataList.first,
+                              color: mainColor,
+                            ),
+                          ),
+                          Expanded(
+                            child: VerticalDivider(
+                              color: Colors.transparent,
                             ),
                           ),
                         ],
                       ),
-                    ),
+                      Text(
+                        contentTitle.first,
+                        style: TextStyle(
+                          color: mainColor,
+                        ),
+                      ),
+                    ],
                   ),
                 ),
                 Divider(
-                  color: Colors.transparent,
+                  color: mainColor,
+                  thickness: 2,
                   height: 30,
                 ),
-                Material(
-                  elevation: 10,
-                  borderRadius: BorderRadius.circular(10),
-                  shadowColor: mainColor,
+                Container(
                   child: Container(
                     padding: EdgeInsets.all(10),
                     decoration: BoxDecoration(
-                      color: mainColor,
                       borderRadius: BorderRadius.circular(10),
                     ),
                     child: Column(
                       children: [
                         Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
                           children: [
                             Expanded(
                               child: FittedBox(
                                 child: Text(
-                                  content[2],
+                                  content[1],
                                   style: TextStyle(
-                                      color: itemColor,
+                                      color: mainColor,
                                       fontSize: 20,
                                       fontWeight: FontWeight.bold),
                                 ),
@@ -231,8 +179,8 @@ class InfoPage extends StatelessWidget {
                             ),
                             Expanded(
                               child: Icon(
-                                iconDataList[2],
-                                color: itemColor,
+                                iconDataList[1],
+                                color: mainColor,
                               ),
                             ),
                             Expanded(
@@ -243,13 +191,60 @@ class InfoPage extends StatelessWidget {
                           ],
                         ),
                         Text(
-                          contentTitle[2],
+                          contentTitle[1],
                           style: TextStyle(
-                            color: itemColor,
+                            color: mainColor,
                           ),
                         ),
                       ],
                     ),
+                  ),
+                ),
+                Divider(
+                  thickness: 2,
+                  color: mainColor,
+                  height: 30,
+                ),
+                Container(
+                  padding: EdgeInsets.all(10),
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(10),
+                  ),
+                  child: Column(
+                    children: [
+                      Row(
+                        children: [
+                          Expanded(
+                            child: FittedBox(
+                              child: Text(
+                                content[2],
+                                style: TextStyle(
+                                    color: mainColor,
+                                    fontSize: 20,
+                                    fontWeight: FontWeight.bold),
+                              ),
+                            ),
+                          ),
+                          Expanded(
+                            child: Icon(
+                              iconDataList[2],
+                              color: mainColor,
+                            ),
+                          ),
+                          Expanded(
+                            child: VerticalDivider(
+                              color: Colors.transparent,
+                            ),
+                          ),
+                        ],
+                      ),
+                      Text(
+                        contentTitle[2],
+                        style: TextStyle(
+                          color: mainColor,
+                        ),
+                      ),
+                    ],
                   ),
                 ),
               ],
