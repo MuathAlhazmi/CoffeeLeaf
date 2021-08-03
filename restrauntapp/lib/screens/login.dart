@@ -9,9 +9,8 @@ import 'package:flutter/material.dart';
 import 'package:phone_number/phone_number.dart';
 import 'package:pinput/pin_put/pin_put.dart';
 import 'package:restrauntapp/constants/constants.dart';
-import 'package:restrauntapp/data/data.dart';
 import 'package:restrauntapp/main.dart';
-import 'package:restrauntapp/screens/detailscreen.dart';
+import 'package:restrauntapp/screens/homepage.dart';
 import 'package:restrauntapp/widgets/snackbar.dart';
 import 'package:restrauntapp/widgets/textfield.dart';
 
@@ -519,15 +518,7 @@ class _LoginScreenState extends State<LoginScreen> {
             Navigator.push(
                 context,
                 MaterialPageRoute(
-                  builder: (context) => DetailScreen(
-                    itemID: items[0].itemID,
-                    description: items[0].description,
-                    price: items[0].price,
-                    image: items[0].image,
-                    name: items[0].name,
-                    quantity: items[0].quantity,
-                  ),
-                ));
+                    builder: (context) => HomePage(enabled: true)));
           } else {
             print("Error");
           }

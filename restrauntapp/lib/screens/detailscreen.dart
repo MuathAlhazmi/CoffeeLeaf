@@ -8,6 +8,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 import 'package:flutter_staggered_animations/flutter_staggered_animations.dart';
+import 'package:like_button/like_button.dart';
 import 'package:restrauntapp/constants/constants.dart';
 import 'package:restrauntapp/data/data.dart';
 import 'package:restrauntapp/models/models.dart';
@@ -19,12 +20,14 @@ class DetailScreen extends StatefulWidget {
   final String description;
   final String name;
   final String image;
+  bool isLiked;
   final String itemID;
   final num price;
   int quantity;
   DetailScreen(
       {required this.image,
       required this.itemID,
+      required this.isLiked,
       required this.description,
       required this.name,
       required this.quantity,
@@ -35,13 +38,16 @@ class DetailScreen extends StatefulWidget {
 }
 
 class _DetailScreenState extends State<DetailScreen> {
+  final key = GlobalKey<LikeButtonState>();
   ScrollController _scrollController = ScrollController();
   final TextEditingController searchtext = TextEditingController();
   List<Item> searchItems = [];
   final TextEditingController review = TextEditingController();
   int star = 0;
+
   @override
   Widget build(BuildContext context) {
+    print(widget.isLiked);
     return Container(
       decoration: BoxDecoration(
           gradient: LinearGradient(
@@ -68,6 +74,48 @@ class _DetailScreenState extends State<DetailScreen> {
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
+                ElevatedButton(
+                    style: ElevatedButton.styleFrom(
+                      elevation: 0,
+                      shape: RoundedRectangleBorder(
+                        side: BorderSide(
+                          width: 2,
+                          color: mainColor,
+                        ),
+                        borderRadius: BorderRadius.circular(10),
+                      ),
+                      primary: itemColor,
+                      onPrimary: Colors.black12,
+                    ),
+                    onPressed: () {
+                      if (!favourite
+                          .any((element) => element.name == widget.name)) {
+                        snackBarWidget(context, 'تم الاضافة في المعجابات بنجاح',
+                            Icons.check, Colors.white);
+                        setState(() {
+                          favourite.add(Item(
+                              isLiked: widget.isLiked,
+                              itemID: widget.itemID,
+                              description: widget.description,
+                              image: widget.image,
+                              name: widget.name,
+                              quantity: widget.quantity,
+                              price: widget.price));
+                        });
+                      } else {
+                        snackBarWidget(context, 'تم الحذف من المعجابات بنجاح',
+                            Icons.check, Colors.white);
+                        setState(() {
+                          favourite.removeWhere(
+                              (element) => element.name == widget.name);
+                        });
+                      }
+                    },
+                    child: Icon(
+                        favourite.any((element) => element.name == widget.name)
+                            ? CupertinoIcons.heart_fill
+                            : CupertinoIcons.heart,
+                        color: mainColor)),
                 ElevatedButton(
                   style: ElevatedButton.styleFrom(
                     elevation: 0,
@@ -248,6 +296,7 @@ class _DetailScreenState extends State<DetailScreen> {
                             });
                         setState(() {
                           cart.add(Item(
+                              isLiked: widget.isLiked,
                               itemID: widget.itemID,
                               description: widget.description,
                               image: widget.image,
@@ -1122,27 +1171,27 @@ class _DetailScreenState extends State<DetailScreen> {
                                             Navigator.push(
                                                 context,
                                                 MaterialPageRoute(
-                                                    builder: (context) =>
-                                                        DetailScreen(
-                                                            itemID: displayItems[
-                                                                    index]
+                                                    builder: (context) => DetailScreen(
+                                                        isLiked:
+                                                            displayItems[index]
+                                                                .isLiked,
+                                                        itemID:
+                                                            displayItems[index]
                                                                 .itemID,
-                                                            description:
-                                                                displayItems[
-                                                                        index]
-                                                                    .description,
-                                                            image: displayItems[
-                                                                    index]
+                                                        description:
+                                                            displayItems[index]
+                                                                .description,
+                                                        image:
+                                                            displayItems[index]
                                                                 .image,
-                                                            name: displayItems[
-                                                                    index]
+                                                        name:
+                                                            displayItems[index]
                                                                 .name,
-                                                            quantity:
-                                                                displayItems[
-                                                                        index]
-                                                                    .quantity,
-                                                            price: displayItems[
-                                                                    index]
+                                                        quantity:
+                                                            displayItems[index]
+                                                                .quantity,
+                                                        price:
+                                                            displayItems[index]
                                                                 .price)));
                                           },
                                           child: Container(
@@ -1211,49 +1260,49 @@ class _DetailScreenState extends State<DetailScreen> {
       ),
     );
   }
-}
 
-getExpenseItems(AsyncSnapshot<QuerySnapshot> snapshot) {
-  return snapshot.data!.docs
-      .map(
-        (doc) => Padding(
-          padding: const EdgeInsets.symmetric(vertical: 20.0, horizontal: 10),
-          child: new Container(
-            padding: EdgeInsets.symmetric(horizontal: 20, vertical: 10),
-            decoration: BoxDecoration(
-              border: Border.all(color: mainColor, width: 2),
-              color: itemColor,
-              borderRadius: BorderRadius.circular(10),
+  getExpenseItems(AsyncSnapshot<QuerySnapshot> snapshot) {
+    return snapshot.data!.docs
+        .map(
+          (doc) => Padding(
+            padding: const EdgeInsets.symmetric(vertical: 20.0, horizontal: 10),
+            child: new Container(
+              padding: EdgeInsets.symmetric(horizontal: 20, vertical: 10),
+              decoration: BoxDecoration(
+                border: Border.all(color: mainColor, width: 2),
+                color: itemColor,
+                borderRadius: BorderRadius.circular(10),
+              ),
+              child: Column(children: [
+                Row(
+                  children: [
+                    FittedBox(child: Text(doc['username'])),
+                    VerticalDivider(color: Colors.transparent),
+                    Directionality(
+                      textDirection: TextDirection.ltr,
+                      child: RatingBar(
+                          initialRating: (doc["star"] as int).toDouble(),
+                          ignoreGestures: true,
+                          glowColor: mainColor,
+                          ratingWidget: RatingWidget(
+                            empty: Icon(CupertinoIcons.star, color: mainColor),
+                            half: Icon(CupertinoIcons.star_lefthalf_fill,
+                                color: mainColor),
+                            full: Icon(CupertinoIcons.star_fill,
+                                color: mainColor),
+                          ),
+                          onRatingUpdate: (rating) {}),
+                    ),
+                  ],
+                ),
+                Divider(
+                  color: Colors.transparent,
+                ),
+                Text(doc["content"]),
+              ]),
             ),
-            child: Column(children: [
-              Row(
-                children: [
-                  FittedBox(child: Text(doc['username'])),
-                  VerticalDivider(color: Colors.transparent),
-                  Directionality(
-                    textDirection: TextDirection.ltr,
-                    child: RatingBar(
-                        initialRating: (doc["star"] as int).toDouble(),
-                        ignoreGestures: true,
-                        glowColor: mainColor,
-                        ratingWidget: RatingWidget(
-                          empty: Icon(CupertinoIcons.star, color: mainColor),
-                          half: Icon(CupertinoIcons.star_lefthalf_fill,
-                              color: mainColor),
-                          full:
-                              Icon(CupertinoIcons.star_fill, color: mainColor),
-                        ),
-                        onRatingUpdate: (rating) {}),
-                  ),
-                ],
-              ),
-              Divider(
-                color: Colors.transparent,
-              ),
-              Text(doc["content"]),
-            ]),
           ),
-        ),
-      )
-      .toList();
+        )
+        .toList();
+  }
 }

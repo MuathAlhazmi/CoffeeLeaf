@@ -8,15 +8,26 @@ import 'package:flutter/material.dart';
 import 'package:restrauntapp/constants/constants.dart';
 import 'package:restrauntapp/main.dart';
 import 'package:restrauntapp/screens/login.dart';
+import 'package:restrauntapp/widgets/snackbar.dart';
 
 class LandingPage extends StatefulWidget {
-  const LandingPage({Key? key}) : super(key: key);
-
+  final bool? signingout;
+  const LandingPage({this.signingout});
   @override
   _LandingPageState createState() => _LandingPageState();
 }
 
 class _LandingPageState extends State<LandingPage> {
+  @override
+  void initState() {
+    if (widget.signingout ?? false) {
+      FirebaseAuth.instance.signOut();
+      snackBarWidget(
+          context, 'تم تسجيل الخروج بنجاج', Icons.check, Colors.white);
+    }
+    super.initState();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(

@@ -141,6 +141,8 @@ class _CartScreensState extends State<CartScreens> {
                                             MaterialPageRoute(
                                                 builder: (context) =>
                                                     DetailScreen(
+                                                        isLiked:
+                                                            cart[index].isLiked,
                                                         itemID:
                                                             cart[index].itemID,
                                                         description: cart[index]

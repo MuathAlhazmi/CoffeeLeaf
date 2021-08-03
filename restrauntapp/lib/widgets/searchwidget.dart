@@ -106,6 +106,9 @@ class _SearchWidgetState extends State<SearchWidget> {
                                                   MaterialPageRoute(
                                                       builder: (context) =>
                                                           DetailScreen(
+                                                              isLiked: widget
+                                                                  .items[index]
+                                                                  .isLiked,
                                                               itemID: widget
                                                                   .items[index]
                                                                   .itemID,
@@ -211,6 +214,10 @@ class _SearchWidgetState extends State<SearchWidget> {
                                                 MaterialPageRoute(
                                                     builder: (context) =>
                                                         DetailScreen(
+                                                            isLiked: widget
+                                                                .searchResult[
+                                                                    index]
+                                                                .isLiked,
                                                             itemID: widget
                                                                 .searchResult[
                                                                     index]

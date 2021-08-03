@@ -5,12 +5,12 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:restrauntapp/constants/constants.dart';
+import 'package:restrauntapp/screens/favourites.dart';
 import 'package:restrauntapp/screens/landingpage.dart';
 import 'package:restrauntapp/screens/orders.dart';
 import 'package:restrauntapp/screens/profile.dart';
 import 'package:restrauntapp/screens/tablebooking.dart';
 import 'package:restrauntapp/widgets/settinglist.dart';
-import 'package:restrauntapp/widgets/snackbar.dart';
 
 class SettingsPage extends StatefulWidget {
   const SettingsPage({Key? key}) : super(key: key);
@@ -135,7 +135,7 @@ class _SettingsPageState extends State<SettingsPage> {
                                   sub: 'اضغط هنا لكي تحجز الآن',
                                 )));
                   },
-                  iconData: CupertinoIcons.clock,
+                  iconData: CupertinoIcons.clock_fill,
                   title: 'حجز طاولة',
                 ),
                 Divider(
@@ -148,7 +148,7 @@ class _SettingsPageState extends State<SettingsPage> {
                         MaterialPageRoute(
                             builder: (context) => PreviousOrders()));
                   },
-                  iconData: CupertinoIcons.bag,
+                  iconData: CupertinoIcons.bag_fill,
                   title: 'طلباتي السابقة',
                 ),
                 Divider(
@@ -156,18 +156,26 @@ class _SettingsPageState extends State<SettingsPage> {
                 ),
                 SettingsList(
                   onTap: () async {
-                    await FirebaseAuth.instance.signOut();
-                    snackBarWidget(context, 'تم تسجيل الخروج بنجاج',
-                        Icons.check, Colors.white);
-                    setState(
-                      () {
-                        Navigator.pushAndRemoveUntil(
-                            context,
-                            MaterialPageRoute(
-                                builder: (context) => LandingPage()),
-                            (route) => false);
-                      },
-                    );
+                    Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) => FavouritesPage()));
+                  },
+                  iconData: CupertinoIcons.heart_fill,
+                  title: 'المعجبات',
+                ),
+                Divider(
+                  color: Colors.transparent,
+                ),
+                SettingsList(
+                  onTap: () {
+                    Navigator.pushAndRemoveUntil(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) => LandingPage(
+                                  signingout: true,
+                                )),
+                        (route) => false);
                   },
                   iconData: Icons.logout,
                   title: 'تسجيل الخروج',
