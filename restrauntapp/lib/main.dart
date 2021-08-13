@@ -13,66 +13,80 @@ import 'package:flutter_staggered_animations/flutter_staggered_animations.dart';
 import 'package:page_transition/page_transition.dart';
 import 'package:restrauntapp/constants/constants.dart';
 import 'package:restrauntapp/data/data.dart';
+import 'package:restrauntapp/helpers/responsive.dart';
 import 'package:restrauntapp/screens/cart.dart';
 import 'package:restrauntapp/screens/homepage.dart';
 import 'package:restrauntapp/screens/landingpage.dart';
 import 'package:restrauntapp/screens/search.dart';
 import 'package:restrauntapp/screens/settings.dart';
 import 'package:shimmer/shimmer.dart';
+import 'package:sizer/sizer.dart';
 
-void main() async {
+void main() {
   WidgetsFlutterBinding.ensureInitialized();
 
-  await Firebase.initializeApp();
   SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp])
       .then((_) {
     runApp(MyApp());
   });
 }
 
-class MyApp extends StatelessWidget {
+class MyApp extends StatefulWidget {
+  @override
+  _MyAppState createState() => _MyAppState();
+}
+
+class _MyAppState extends State<MyApp> {
+  final Future<FirebaseApp> _initialization = Firebase.initializeApp();
+
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-        debugShowCheckedModeBanner: false,
-        localizationsDelegates: [
-          GlobalMaterialLocalizations.delegate,
-          GlobalWidgetsLocalizations.delegate,
-          GlobalCupertinoLocalizations.delegate,
-        ],
-        supportedLocales: [
-          const Locale('ar'),
-        ],
-        title: 'Shimmer',
-        routes: <String, WidgetBuilder>{
-          'loading': (_) => LoadingListPage(),
-        },
-        theme: ThemeData(
-          primarySwatch: colorCustom,
-          fontFamily: 'Cairo',
-        ),
-        home: AnimatedSplashScreen(
-          curve: Curves.easeInOut,
-          animationDuration: Duration(seconds: 2),
-          duration: 3000,
-          splash: Material(
-            color: Colors.transparent,
-            elevation: 20,
-            shadowColor: mainColor,
-            borderRadius: BorderRadius.circular(20),
-            child: ClipRRect(
-              borderRadius: BorderRadius.circular(10),
-              child: Image.asset(
-                'assets/images/logo.png',
-              ),
-            ),
+    return Sizer(builder: (context, orientation, deviceType) {
+      return MaterialApp(
+          debugShowCheckedModeBanner: false,
+          localizationsDelegates: [
+            GlobalMaterialLocalizations.delegate,
+            GlobalWidgetsLocalizations.delegate,
+            GlobalCupertinoLocalizations.delegate,
+          ],
+          supportedLocales: [
+            const Locale('ar'),
+          ],
+          theme: ThemeData(
+            primarySwatch: colorCustom,
+            fontFamily: 'Cairo',
           ),
-          nextScreen: LandingPage(),
-          splashTransition: SplashTransition.slideTransition,
-          backgroundColor: itemColor,
-          pageTransitionType: PageTransitionType.rightToLeft,
-          centered: true,
-        ));
+          home: FutureBuilder(
+              future: _initialization,
+              builder: (context, snapshot) {
+                if (snapshot.hasError) {}
+                if (snapshot.connectionState == ConnectionState.done) {
+                  return AnimatedSplashScreen(
+                    curve: Curves.easeInOut,
+                    animationDuration: Duration(seconds: 2),
+                    duration: 3000,
+                    splash: Material(
+                      color: Colors.transparent,
+                      elevation: 20,
+                      shadowColor: mainColor,
+                      borderRadius: BorderRadius.circular(20),
+                      child: ClipRRect(
+                        borderRadius: BorderRadius.circular(10),
+                        child: Image.asset(
+                          'assets/images/Untitled design (2).png',
+                        ),
+                      ),
+                    ),
+                    nextScreen: LandingPage(),
+                    splashTransition: SplashTransition.slideTransition,
+                    backgroundColor: itemColor,
+                    pageTransitionType: PageTransitionType.rightToLeft,
+                    centered: true,
+                  );
+                }
+                return Center(child: CupertinoActivityIndicator());
+              }));
+    });
   }
 }
 
@@ -120,6 +134,12 @@ class _LoadingListPageState extends State<LoadingListPage> {
             duration: Duration(milliseconds: 250),
             curve: Curves.easeInOut,
             paddingR: EdgeInsets.symmetric(vertical: 20, horizontal: 20),
+            marginR: EdgeInsets.symmetric(
+                horizontal: Responsive.isDesktop(context) ||
+                        Responsive.isTablet(context)
+                    ? MediaQuery.of(context).size.width * 0.3
+                    : MediaQuery.of(context).size.width * 0.15,
+                vertical: 20),
             itemPadding: EdgeInsets.symmetric(horizontal: 0, vertical: 0),
             boxShadow: [
               BoxShadow(
@@ -189,9 +209,16 @@ class _LoadingListPageState extends State<LoadingListPage> {
 }
 
 printUrl1() async {
-  Reference ref = FirebaseStorage.instance.ref().child("Untitled design.png");
+  Reference ref =
+      FirebaseStorage.instance.ref().child("Untitled design (2).png");
   var url = await ref.getDownloadURL();
-  print(url);
+
+  return url;
+}
+
+printUrlText() async {
+  Reference ref = FirebaseStorage.instance.ref().child("26.png");
+  var url = await ref.getDownloadURL();
 
   return url;
 }
@@ -211,7 +238,11 @@ class Shimmering extends StatelessWidget {
             crossAxisCount: 3,
             mainAxisSpacing: 10,
             crossAxisSpacing: 10,
-            childAspectRatio: 0.7),
+            childAspectRatio: Responsive.isDesktop(context)
+                ? 1.4
+                : Responsive.isTablet(context)
+                    ? 1.2
+                    : 0.7),
         physics: NeverScrollableScrollPhysics(),
         itemBuilder: (context, index) => AnimationLimiter(
           child: AnimationLimiter(
@@ -258,13 +289,14 @@ class ShimmeringCarousel extends StatelessWidget {
       enabled: enabled,
       child: CarouselSlider(
           options: CarouselOptions(
+            enableInfiniteScroll: false,
             viewportFraction: 0.7,
-            height: 220.0,
+            height: MediaQuery.of(context).size.height * 0.3,
             autoPlay: true,
             enlargeCenterPage: true,
             autoPlayInterval: Duration(seconds: 3),
             autoPlayAnimationDuration: Duration(milliseconds: 500),
-            autoPlayCurve: Curves.fastOutSlowIn,
+            autoPlayCurve: Curves.easeInOut,
             pauseAutoPlayOnTouch: true,
             aspectRatio: 2.0,
             onPageChanged: (index, reason) {},

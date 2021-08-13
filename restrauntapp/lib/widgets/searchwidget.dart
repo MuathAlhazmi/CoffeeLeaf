@@ -3,6 +3,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_staggered_animations/flutter_staggered_animations.dart';
 import 'package:restrauntapp/constants/constants.dart';
+import 'package:restrauntapp/helpers/responsive.dart';
 import 'package:restrauntapp/models/models.dart';
 import 'package:restrauntapp/screens/detailscreen.dart';
 import 'package:restrauntapp/widgets/textfield.dart';
@@ -77,7 +78,12 @@ class _SearchWidgetState extends State<SearchWidget> {
                                     crossAxisCount: 3,
                                     mainAxisSpacing: 10,
                                     crossAxisSpacing: 10,
-                                    childAspectRatio: 0.7),
+                                    childAspectRatio:
+                                        Responsive.isDesktop(context)
+                                            ? 1.4
+                                            : Responsive.isTablet(context)
+                                                ? 1.2
+                                                : 0.7),
                             // physics: NeverScrollableScrollPhysics(),
                             itemCount: widget.items.length,
                             itemBuilder: (context, index) => AnimationLimiter(
@@ -181,13 +187,15 @@ class _SearchWidgetState extends State<SearchWidget> {
                       : Container(
                           padding: EdgeInsets.all(7),
                           child: GridView.builder(
-                            gridDelegate:
-                                SliverGridDelegateWithFixedCrossAxisCount(
-                                    crossAxisCount: 3,
-                                    mainAxisSpacing: 10,
-                                    crossAxisSpacing: 10,
-                                    childAspectRatio: 0.7),
-                            // physics: NeverScrollableScrollPhysics(),
+                            gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                                crossAxisCount: 3,
+                                mainAxisSpacing: 10,
+                                crossAxisSpacing: 10,
+                                childAspectRatio: Responsive.isDesktop(context)
+                                    ? 1.4
+                                    : Responsive.isTablet(context)
+                                        ? 1.2
+                                        : 0.7), // physics: NeverScrollableScrollPhysics(),
                             itemCount: widget.searchResult.length,
                             itemBuilder: (context, index) => AnimationLimiter(
                               child: AnimationLimiter(

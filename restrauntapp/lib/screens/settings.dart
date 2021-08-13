@@ -117,11 +117,8 @@ class _SettingsPageState extends State<SettingsPage> {
                                 number: number,
                                 email: email)));
                   },
-                  iconData: CupertinoIcons.profile_circled,
+                  iconData: CupertinoIcons.person,
                   title: 'تعديل معلوماتي',
-                ),
-                Divider(
-                  color: Colors.transparent,
                 ),
                 SettingsList(
                   onTap: () async {
@@ -135,11 +132,8 @@ class _SettingsPageState extends State<SettingsPage> {
                                   sub: 'اضغط هنا لكي تحجز الآن',
                                 )));
                   },
-                  iconData: CupertinoIcons.clock_fill,
+                  iconData: CupertinoIcons.clock,
                   title: 'حجز طاولة',
-                ),
-                Divider(
-                  color: Colors.transparent,
                 ),
                 SettingsList(
                   onTap: () async {
@@ -148,11 +142,8 @@ class _SettingsPageState extends State<SettingsPage> {
                         MaterialPageRoute(
                             builder: (context) => PreviousOrders()));
                   },
-                  iconData: CupertinoIcons.bag_fill,
+                  iconData: CupertinoIcons.bag,
                   title: 'طلباتي السابقة',
-                ),
-                Divider(
-                  color: Colors.transparent,
                 ),
                 SettingsList(
                   onTap: () async {
@@ -161,11 +152,8 @@ class _SettingsPageState extends State<SettingsPage> {
                         MaterialPageRoute(
                             builder: (context) => FavouritesPage()));
                   },
-                  iconData: CupertinoIcons.heart_fill,
-                  title: 'المعجبات',
-                ),
-                Divider(
-                  color: Colors.transparent,
+                  iconData: CupertinoIcons.heart,
+                  title: 'المفضلات',
                 ),
                 SettingsList(
                   onTap: () {

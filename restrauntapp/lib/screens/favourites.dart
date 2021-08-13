@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_staggered_animations/flutter_staggered_animations.dart';
 import 'package:restrauntapp/constants/constants.dart';
 import 'package:restrauntapp/data/data.dart';
+import 'package:restrauntapp/helpers/responsive.dart';
 import 'package:restrauntapp/models/models.dart';
 import 'package:restrauntapp/screens/detailscreen.dart';
 import 'package:restrauntapp/widgets/textfield.dart';
@@ -25,7 +26,7 @@ class _FavouritesPageState extends State<FavouritesPage> {
             FocusScope.of(context).unfocus();
           },
           child: Container(
-            padding: EdgeInsets.symmetric(horizontal: 5, vertical: 10),
+            padding: EdgeInsets.symmetric(horizontal: 20, vertical: 10),
             child: Column(
               children: [
                 Row(
@@ -93,7 +94,7 @@ class _FavouritesPageState extends State<FavouritesPage> {
                           ? Container(
                               child: Center(
                                 child: Text(
-                                  'لا يوجد أي  طلبات',
+                                  'لا يوجد أي  منتج في المفضلات',
                                   style: TextStyle(
                                       color: mainColor,
                                       fontWeight: FontWeight.bold),
@@ -108,8 +109,12 @@ class _FavouritesPageState extends State<FavouritesPage> {
                                         crossAxisCount: 3,
                                         mainAxisSpacing: 10,
                                         crossAxisSpacing: 10,
-                                        childAspectRatio: 0.7),
-                                // physics: NeverScrollableScrollPhysics(),
+                                        childAspectRatio:
+                                            Responsive.isDesktop(context)
+                                                ? 1.4
+                                                : Responsive.isTablet(context)
+                                                    ? 1.2
+                                                    : 0.7),
                                 itemCount: favourite.length,
                                 itemBuilder: (context, index) =>
                                     AnimationLimiter(
@@ -212,99 +217,124 @@ class _FavouritesPageState extends State<FavouritesPage> {
                                 ),
                               ),
                             )
-                      : Container(
-                          padding: EdgeInsets.all(7),
-                          child: GridView.builder(
-                            gridDelegate:
-                                SliverGridDelegateWithFixedCrossAxisCount(
-                                    crossAxisCount: 3,
-                                    mainAxisSpacing: 10,
-                                    crossAxisSpacing: 10,
-                                    childAspectRatio: 0.7),
-                            // physics: NeverScrollableScrollPhysics(),
-                            itemCount: searchResult.length,
-                            itemBuilder: (context, index) => AnimationLimiter(
-                              child: AnimationLimiter(
-                                child: AnimationConfiguration.staggeredList(
-                                  position: index,
-                                  duration: const Duration(milliseconds: 500),
-                                  delay: Duration(milliseconds: 200),
-                                  child: ScaleAnimation(
-                                    child: FadeInAnimation(
-                                      child: Container(
-                                        decoration: BoxDecoration(
-                                          border: Border.all(
-                                            color: mainColor,
-                                            width: 2,
-                                          ),
-                                          color: itemColor,
-                                          borderRadius:
-                                              BorderRadius.circular(10),
-                                        ),
-                                        child: GestureDetector(
-                                          onTap: () {
-                                            Navigator.push(
-                                                context,
-                                                MaterialPageRoute(
-                                                    builder: (context) => DetailScreen(
-                                                        isLiked:
-                                                            searchResult[index]
-                                                                .isLiked,
-                                                        itemID:
-                                                            searchResult[index]
-                                                                .itemID,
-                                                        description:
-                                                            searchResult[index]
-                                                                .description,
-                                                        price:
-                                                            searchResult[index]
-                                                                .price,
-                                                        image:
-                                                            searchResult[index]
+                      : searchResult.isEmpty
+                          ? Container(
+                              child: Center(
+                                child: Text(
+                                  'لا يوجد أي  منتج في المفضلات',
+                                  style: TextStyle(
+                                      color: mainColor,
+                                      fontWeight: FontWeight.bold),
+                                ),
+                              ),
+                            )
+                          : Container(
+                              padding: EdgeInsets.all(7),
+                              child: GridView.builder(
+                                gridDelegate:
+                                    SliverGridDelegateWithFixedCrossAxisCount(
+                                        crossAxisCount: 3,
+                                        mainAxisSpacing: 10,
+                                        crossAxisSpacing: 10,
+                                        childAspectRatio:
+                                            Responsive.isDesktop(context)
+                                                ? 1.4
+                                                : Responsive.isTablet(context)
+                                                    ? 1.2
+                                                    : 0.7),
+                                // physics: NeverScrollableScrollPhysics(),
+                                itemCount: searchResult.length,
+                                itemBuilder: (context, index) =>
+                                    AnimationLimiter(
+                                  child: AnimationLimiter(
+                                    child: AnimationConfiguration.staggeredList(
+                                      position: index,
+                                      duration:
+                                          const Duration(milliseconds: 500),
+                                      delay: Duration(milliseconds: 200),
+                                      child: ScaleAnimation(
+                                        child: FadeInAnimation(
+                                          child: Container(
+                                            decoration: BoxDecoration(
+                                              border: Border.all(
+                                                color: mainColor,
+                                                width: 2,
+                                              ),
+                                              color: itemColor,
+                                              borderRadius:
+                                                  BorderRadius.circular(10),
+                                            ),
+                                            child: GestureDetector(
+                                              onTap: () {
+                                                Navigator.push(
+                                                    context,
+                                                    MaterialPageRoute(
+                                                        builder: (context) => DetailScreen(
+                                                            isLiked:
+                                                                searchResult[index]
+                                                                    .isLiked,
+                                                            itemID:
+                                                                searchResult[index]
+                                                                    .itemID,
+                                                            description:
+                                                                searchResult[index]
+                                                                    .description,
+                                                            price:
+                                                                searchResult[index]
+                                                                    .price,
+                                                            image: searchResult[
+                                                                    index]
                                                                 .image,
-                                                        name:
-                                                            searchResult[index]
+                                                            name: searchResult[
+                                                                    index]
                                                                 .name,
-                                                        quantity:
-                                                            searchResult[index]
-                                                                .quantity)));
-                                          },
-                                          child: Column(
-                                            mainAxisAlignment:
-                                                MainAxisAlignment.spaceAround,
-                                            children: [
-                                              Expanded(
-                                                  child: ClipRRect(
-                                                borderRadius:
-                                                    BorderRadius.circular(20),
-                                                child: CachedNetworkImage(
-                                                  imageUrl:
-                                                      searchResult[index].image,
-                                                  progressIndicatorBuilder: (context,
-                                                          url,
-                                                          downloadProgress) =>
-                                                      CupertinoActivityIndicator(
-                                                          radius: 10),
-                                                  errorWidget:
-                                                      (context, url, error) =>
+                                                            quantity:
+                                                                searchResult[
+                                                                        index]
+                                                                    .quantity)));
+                                              },
+                                              child: Column(
+                                                mainAxisAlignment:
+                                                    MainAxisAlignment
+                                                        .spaceAround,
+                                                children: [
+                                                  Expanded(
+                                                      child: ClipRRect(
+                                                    borderRadius:
+                                                        BorderRadius.circular(
+                                                            20),
+                                                    child: CachedNetworkImage(
+                                                      imageUrl:
+                                                          searchResult[index]
+                                                              .image,
+                                                      progressIndicatorBuilder:
+                                                          (context, url,
+                                                                  downloadProgress) =>
+                                                              CupertinoActivityIndicator(
+                                                                  radius: 10),
+                                                      errorWidget: (context,
+                                                              url, error) =>
                                                           Icon(
-                                                    Icons.error,
-                                                    color: Colors.white,
+                                                        Icons.error,
+                                                        color: Colors.white,
+                                                      ),
+                                                      fit: BoxFit.cover,
+                                                    ),
+                                                  )),
+                                                  Text(
+                                                    searchResult[index].name,
+                                                    overflow:
+                                                        TextOverflow.ellipsis,
                                                   ),
-                                                  fit: BoxFit.cover,
-                                                ),
-                                              )),
-                                              Text(
-                                                searchResult[index].name,
-                                                overflow: TextOverflow.ellipsis,
+                                                  Directionality(
+                                                    textDirection:
+                                                        TextDirection.rtl,
+                                                    child: Text(
+                                                        '${searchResult[index].price.toString()} ريال'),
+                                                  ),
+                                                ],
                                               ),
-                                              Directionality(
-                                                textDirection:
-                                                    TextDirection.rtl,
-                                                child: Text(
-                                                    '${searchResult[index].price.toString()} ريال'),
-                                              ),
-                                            ],
+                                            ),
                                           ),
                                         ),
                                       ),
@@ -313,8 +343,6 @@ class _FavouritesPageState extends State<FavouritesPage> {
                                 ),
                               ),
                             ),
-                          ),
-                        ),
                 ),
               ],
             ),

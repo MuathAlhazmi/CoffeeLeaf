@@ -7,10 +7,12 @@ import 'package:flutter/material.dart';
 import 'package:flutter_staggered_animations/flutter_staggered_animations.dart';
 import 'package:restrauntapp/constants/constants.dart';
 import 'package:restrauntapp/data/data.dart';
+import 'package:restrauntapp/helpers/responsive.dart';
 import 'package:restrauntapp/main.dart';
 import 'package:restrauntapp/screens/cart.dart';
 import 'package:restrauntapp/screens/detailscreen.dart';
 import 'package:restrauntapp/screens/info.dart';
+import 'package:restrauntapp/screens/menu.dart';
 import 'package:restrauntapp/screens/tablebooking.dart';
 import 'package:restrauntapp/widgets/carousel.dart';
 
@@ -23,11 +25,68 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
+  var top = 0.0;
+
   int pageIndex = 0;
   final CarouselController _controller = CarouselController();
   @override
   Widget build(BuildContext context) {
     List<Widget> carouselWidgets = [
+      GestureDetector(
+        onTap: () {
+          Navigator.push(
+              context, MaterialPageRoute(builder: (context) => MenuImage()));
+        },
+        child: CarouselWidget(
+          child: Align(
+            alignment: Alignment.bottomCenter,
+            child: Container(
+              padding: EdgeInsets.symmetric(horizontal: 20),
+              child: ClipRRect(
+                borderRadius: BorderRadius.circular(10),
+                child: BackdropFilter(
+                  filter: ImageFilter.blur(sigmaX: 10, sigmaY: 10),
+                  child: Container(
+                    padding: EdgeInsets.symmetric(vertical: 5, horizontal: 20),
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(10),
+                      color: mainColor.withOpacity(.5),
+                    ),
+                    child: Column(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        FittedBox(
+                          child: Text(
+                            'هل تريد قرائة القائمة؟',
+                            style: Theme.of(context).textTheme.headline5!.apply(
+                                  color: Colors.white,
+                                ),
+                          ),
+                        ),
+                        Padding(
+                          padding: const EdgeInsets.symmetric(horizontal: 20),
+                          child: FittedBox(
+                            child: Text(
+                              'اضغط هنا لتقرأ القائمة الآن',
+                              style:
+                                  Theme.of(context).textTheme.subtitle1!.apply(
+                                        color: Colors.white,
+                                      ),
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                ),
+              ),
+            ),
+          ),
+          imageUrl:
+              'https://images.unsplash.com/photo-1628280787420-355b5f7fed27?ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&ixlib=rb-1.2.1&auto=format&fit=crop&w=3350&q=80',
+          title: 'هل تريد قرائة القائمة؟',
+        ),
+      ),
       GestureDetector(
         onTap: () {
           Navigator.push(
@@ -48,7 +107,7 @@ class _HomePageState extends State<HomePage> {
               child: ClipRRect(
                 borderRadius: BorderRadius.circular(10),
                 child: BackdropFilter(
-                  filter: ImageFilter.blur(sigmaX: 5, sigmaY: 5),
+                  filter: ImageFilter.blur(sigmaX: 10, sigmaY: 10),
                   child: Container(
                     padding: EdgeInsets.symmetric(vertical: 5, horizontal: 20),
                     decoration: BoxDecoration(
@@ -113,7 +172,7 @@ class _HomePageState extends State<HomePage> {
               child: ClipRRect(
                 borderRadius: BorderRadius.circular(10),
                 child: BackdropFilter(
-                  filter: ImageFilter.blur(sigmaX: 5, sigmaY: 5),
+                  filter: ImageFilter.blur(sigmaX: 10, sigmaY: 10),
                   child: Container(
                     padding: EdgeInsets.symmetric(vertical: 5, horizontal: 20),
                     decoration: BoxDecoration(
@@ -175,7 +234,7 @@ class _HomePageState extends State<HomePage> {
               child: ClipRRect(
                 borderRadius: BorderRadius.circular(10),
                 child: BackdropFilter(
-                  filter: ImageFilter.blur(sigmaX: 5, sigmaY: 5),
+                  filter: ImageFilter.blur(sigmaX: 10, sigmaY: 10),
                   child: Container(
                     padding: EdgeInsets.symmetric(vertical: 5, horizontal: 20),
                     decoration: BoxDecoration(
@@ -285,58 +344,64 @@ class _HomePageState extends State<HomePage> {
             floating: false,
             pinned: true,
             centerTitle: true,
-            title: FutureBuilder(
-                future: printUrl1(),
-                builder: (context, snapshot) {
-                  if (snapshot.hasData) {
-                    return AnimatedOpacity(
-                      opacity: innerBoxIsScrolled ? 1 : 0,
-                      duration: Duration(milliseconds: 100),
-                      child: ClipRRect(
-                        borderRadius: BorderRadius.circular(20),
-                        child: CachedNetworkImage(
-                          height: kToolbarHeight,
-                          imageUrl: snapshot.data.toString(),
-                          progressIndicatorBuilder:
-                              (context, url, downloadProgress) => Container(),
-                          errorWidget: (context, url, error) => Icon(
-                            Icons.error,
-                            color: Colors.white,
+            flexibleSpace: LayoutBuilder(
+                builder: (BuildContext context, BoxConstraints constraints) {
+              // print('constraints=' + constraints.toString());
+              top = constraints.biggest.height;
+              return FlexibleSpaceBar(
+                centerTitle: true,
+                background: FutureBuilder(
+                    future: printUrl1(),
+                    builder: (context, snapshot) {
+                      if (snapshot.hasData) {
+                        return ClipRRect(
+                          borderRadius: BorderRadius.circular(5),
+                          child: CachedNetworkImage(
+                            height: 100,
+                            width: 100,
+                            imageUrl: snapshot.data.toString(),
+                            progressIndicatorBuilder:
+                                (context, url, downloadProgress) => Container(),
+                            errorWidget: (context, url, error) => Icon(
+                              Icons.error,
+                              color: Colors.white,
+                            ),
+                            fit: BoxFit.contain,
                           ),
-                          fit: BoxFit.contain,
-                        ),
-                      ),
-                    );
-                  } else {
-                    return Container();
-                  }
-                }),
-            flexibleSpace: FlexibleSpaceBar(
-              centerTitle: true,
-              background: FutureBuilder(
-                  future: printUrl1(),
-                  builder: (context, snapshot) {
-                    if (snapshot.hasData) {
-                      return ClipRRect(
-                        borderRadius: BorderRadius.circular(20),
-                        child: CachedNetworkImage(
-                          height: 100,
-                          width: 100,
-                          imageUrl: snapshot.data.toString(),
-                          progressIndicatorBuilder:
-                              (context, url, downloadProgress) => Container(),
-                          errorWidget: (context, url, error) => Icon(
-                            Icons.error,
-                            color: Colors.white,
+                        );
+                      } else {
+                        return Container();
+                      }
+                    }),
+                title: FutureBuilder(
+                    future: printUrlText(),
+                    builder: (context, snapshot) {
+                      if (snapshot.hasData) {
+                        return AnimatedOpacity(
+                          opacity: top == kToolbarHeight ? 1 : 0,
+                          duration: Duration(milliseconds: 200),
+                          child: ClipRRect(
+                            borderRadius: BorderRadius.circular(5),
+                            child: CachedNetworkImage(
+                              height: kToolbarHeight,
+                              imageUrl: snapshot.data.toString(),
+                              progressIndicatorBuilder:
+                                  (context, url, downloadProgress) =>
+                                      Container(),
+                              errorWidget: (context, url, error) => Icon(
+                                Icons.error,
+                                color: Colors.white,
+                              ),
+                              fit: BoxFit.contain,
+                            ),
                           ),
-                          fit: BoxFit.contain,
-                        ),
-                      );
-                    } else {
-                      return Container();
-                    }
-                  }),
-            ),
+                        );
+                      } else {
+                        return Container();
+                      }
+                    }),
+              );
+            }),
           ),
         ];
       },
@@ -347,6 +412,7 @@ class _HomePageState extends State<HomePage> {
           Divider(
             color: Colors.transparent,
           ),
+
           widget.enabled
               ? Padding(
                   padding: const EdgeInsets.symmetric(vertical: 10),
@@ -360,8 +426,8 @@ class _HomePageState extends State<HomePage> {
                       carouselController: _controller,
                       options: CarouselOptions(
                         enableInfiniteScroll: false,
-                        viewportFraction: 0.7,
-                        height: 220.0,
+                        viewportFraction: 0.85,
+                        height: MediaQuery.of(context).size.height * 0.3,
                         autoPlay: true,
                         enlargeCenterPage: true,
                         autoPlayInterval: Duration(seconds: 3),
@@ -449,13 +515,15 @@ class _HomePageState extends State<HomePage> {
                   : Column(children: [
                       Expanded(
                         child: GridView.builder(
-                          gridDelegate:
-                              SliverGridDelegateWithFixedCrossAxisCount(
-                                  crossAxisCount: 3,
-                                  mainAxisSpacing: 10,
-                                  crossAxisSpacing: 10,
-                                  childAspectRatio: 0.7),
-                          // physics: NeverScrollableScrollPhysics(),
+                          gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                              crossAxisCount: 3,
+                              mainAxisSpacing: 10,
+                              crossAxisSpacing: 10,
+                              childAspectRatio: Responsive.isDesktop(context)
+                                  ? 1.4
+                                  : Responsive.isTablet(context)
+                                      ? 1.2
+                                      : 0.7), // physics: NeverScrollableScrollPhysics(),
                           itemCount: items.length,
                           itemBuilder: (context, index) => AnimationLimiter(
                             child: AnimationLimiter(
@@ -541,7 +609,7 @@ class _HomePageState extends State<HomePage> {
                       ),
                     ]),
             ),
-          )
+          ),
         ]),
       ),
     );

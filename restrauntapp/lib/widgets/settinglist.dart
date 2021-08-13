@@ -9,43 +9,51 @@ class SettingsList extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return GestureDetector(
-      onTap: onTap ?? () {},
-      child: Container(
-        decoration: BoxDecoration(
-          color: mainColor,
-          borderRadius: BorderRadius.circular(10),
-        ),
-        padding: EdgeInsets.symmetric(vertical: 10, horizontal: 10),
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: [
-            Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                Icon(
-                  iconData,
-                  size: 18,
-                  color: itemColor,
-                ),
-                VerticalDivider(
-                  color: Colors.transparent,
-                ),
-                Text(
-                  '$title',
-                  style: TextStyle(
-                    fontSize: 12,
+    return Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 5),
+      child: Material(
+        elevation: 20,
+        color: Colors.transparent,
+        borderRadius: BorderRadius.circular(10),
+        shadowColor: Colors.white,
+        child: ElevatedButton(
+          style: ElevatedButton.styleFrom(
+            padding: EdgeInsets.symmetric(horizontal: 10, vertical: 8),
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(10),
+            ),
+          ),
+          onPressed: onTap ?? () {},
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Icon(
+                    iconData,
+                    size: 18,
                     color: itemColor,
                   ),
-                ),
-              ],
-            ),
-            Icon(
-              Icons.arrow_forward_ios,
-              size: 18,
-              color: itemColor,
-            ),
-          ],
+                  VerticalDivider(
+                    color: Colors.transparent,
+                  ),
+                  Text(
+                    '$title',
+                    style: TextStyle(
+                      fontSize: 12,
+                      color: itemColor,
+                    ),
+                  ),
+                ],
+              ),
+              Icon(
+                Icons.arrow_forward_ios,
+                size: 18,
+                color: itemColor,
+              ),
+            ],
+          ),
         ),
       ),
     );

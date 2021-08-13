@@ -11,10 +11,12 @@ import 'package:flutter_staggered_animations/flutter_staggered_animations.dart';
 import 'package:like_button/like_button.dart';
 import 'package:restrauntapp/constants/constants.dart';
 import 'package:restrauntapp/data/data.dart';
+import 'package:restrauntapp/helpers/responsive.dart';
 import 'package:restrauntapp/models/models.dart';
 import 'package:restrauntapp/screens/cart.dart';
 import 'package:restrauntapp/widgets/searchwidget.dart';
 import 'package:restrauntapp/widgets/snackbar.dart';
+import 'package:sizer/sizer.dart';
 
 class DetailScreen extends StatefulWidget {
   final String description;
@@ -58,8 +60,8 @@ class _DetailScreenState extends State<DetailScreen> {
             0.9
           ],
               colors: [
-            currentIndex1 == 0 ? mainColor : itemColor,
-            currentIndex1 == 0 ? itemColor : itemColor,
+            mainColor,
+            itemColor,
           ])),
       child: SafeArea(
         child: Scaffold(
@@ -90,7 +92,7 @@ class _DetailScreenState extends State<DetailScreen> {
                     onPressed: () {
                       if (!favourite
                           .any((element) => element.name == widget.name)) {
-                        snackBarWidget(context, 'تم الاضافة في المعجابات بنجاح',
+                        snackBarWidget(context, 'تم الاضافة في المفضلات بنجاح',
                             Icons.check, Colors.white);
                         setState(() {
                           favourite.add(Item(
@@ -103,7 +105,7 @@ class _DetailScreenState extends State<DetailScreen> {
                               price: widget.price));
                         });
                       } else {
-                        snackBarWidget(context, 'تم الحذف من المعجابات بنجاح',
+                        snackBarWidget(context, 'تم الحذف من المفضلات بنجاح',
                             Icons.check, Colors.white);
                         setState(() {
                           favourite.removeWhere(
@@ -327,6 +329,7 @@ class _DetailScreenState extends State<DetailScreen> {
                     (BuildContext context, bool innerBoxIsScrolled) {
                   return <Widget>[
                     SliverAppBar(
+                      stretch: true,
                       leadingWidth: 75,
                       leading: Padding(
                         padding: const EdgeInsets.all(8.0),
@@ -391,6 +394,11 @@ class _DetailScreenState extends State<DetailScreen> {
                       floating: false,
                       pinned: true,
                       flexibleSpace: FlexibleSpaceBar(
+                        stretchModes: [
+                          StretchMode.zoomBackground,
+                          StretchMode.fadeTitle,
+                          StretchMode.blurBackground,
+                        ],
                         title: ClipRRect(
                           borderRadius: BorderRadius.circular(7),
                           child: BackdropFilter(
@@ -419,16 +427,19 @@ class _DetailScreenState extends State<DetailScreen> {
                           ),
                         ),
                         centerTitle: true,
-                        background: CachedNetworkImage(
-                          imageUrl: widget.image,
-                          progressIndicatorBuilder:
-                              (context, url, downloadProgress) =>
-                                  CupertinoActivityIndicator(radius: 10),
-                          errorWidget: (context, url, error) => Icon(
-                            Icons.error,
-                            color: Colors.white,
+                        background: Container(
+                          color: itemColor,
+                          child: CachedNetworkImage(
+                            imageUrl: widget.image,
+                            progressIndicatorBuilder:
+                                (context, url, downloadProgress) =>
+                                    CupertinoActivityIndicator(radius: 10),
+                            errorWidget: (context, url, error) => Icon(
+                              Icons.error,
+                              color: Colors.white,
+                            ),
+                            fit: BoxFit.contain,
                           ),
-                          fit: BoxFit.cover,
                         ),
                       ),
                       elevation: 20,
@@ -579,7 +590,7 @@ class _DetailScreenState extends State<DetailScreen> {
                                     children: [
                                       Row(
                                         mainAxisAlignment:
-                                            MainAxisAlignment.spaceEvenly,
+                                            MainAxisAlignment.center,
                                         children: [
                                           Text(
                                             '(${snapshot.data!.docs.length})  ${average.toInt().toString()} ',
@@ -587,6 +598,9 @@ class _DetailScreenState extends State<DetailScreen> {
                                                 color: mainColor,
                                                 fontSize: 20,
                                                 fontWeight: FontWeight.bold),
+                                          ),
+                                          VerticalDivider(
+                                            color: Colors.transparent,
                                           ),
                                           Directionality(
                                             textDirection: TextDirection.ltr,
@@ -1117,6 +1131,8 @@ class _DetailScreenState extends State<DetailScreen> {
                         child: Text(
                           widget.description,
                           style: TextStyle(
+                            fontSize:
+                                Responsive.isMobile(context) ? 11.sp : 6.sp,
                             color: mainColor,
                           ),
                         ),
@@ -1142,7 +1158,7 @@ class _DetailScreenState extends State<DetailScreen> {
                         ],
                       ),
                       Container(
-                        height: 150,
+                        height: 20.h,
                         child: Container(
                           padding: EdgeInsets.all(10),
                           decoration: BoxDecoration(
@@ -1205,8 +1221,7 @@ class _DetailScreenState extends State<DetailScreen> {
                                               borderRadius:
                                                   BorderRadius.circular(10),
                                             ),
-                                            height: 150,
-                                            width: 90,
+                                            width: 20.h * 0.67,
                                             child: Column(
                                               mainAxisAlignment:
                                                   MainAxisAlignment.spaceAround,

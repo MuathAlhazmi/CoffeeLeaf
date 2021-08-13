@@ -7,6 +7,7 @@ import 'package:flutter/material.dart';
 import 'package:restrauntapp/constants/constants.dart';
 import 'package:restrauntapp/data/data.dart';
 import 'package:restrauntapp/widgets/snackbar.dart';
+import 'package:sizer/sizer.dart';
 
 class TableBooking extends StatefulWidget {
   final String title;
@@ -81,7 +82,7 @@ class _TableBookingState extends State<TableBooking> {
                     borderRadius: BorderRadius.circular(20),
                     child: CachedNetworkImage(
                       imageUrl: widget.image,
-                      height: MediaQuery.of(context).size.height * .2,
+                      height: MediaQuery.of(context).size.height * .3,
                       width: double.infinity,
                       fit: BoxFit.cover,
                     ),
@@ -93,14 +94,15 @@ class _TableBookingState extends State<TableBooking> {
                 Padding(
                   padding: const EdgeInsets.symmetric(horizontal: 10),
                   child: Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
                     children: [
-                      Expanded(
-                        child: FittedBox(
-                          child: Text(
-                            widget.title,
-                            style: TextStyle(
-                                color: mainColor, fontWeight: FontWeight.bold),
-                          ),
+                      FittedBox(
+                        child: Text(
+                          widget.title,
+                          style: TextStyle(
+                              color: mainColor,
+                              fontWeight: FontWeight.bold,
+                              fontSize: 17.sp),
                         ),
                       ),
                     ],
@@ -112,6 +114,7 @@ class _TableBookingState extends State<TableBooking> {
                     child: Text(
                       widget.sub,
                       style: TextStyle(
+                        fontSize: 12.sp,
                         color: mainColor,
                       ),
                     ),
@@ -294,13 +297,23 @@ class _TableBookingState extends State<TableBooking> {
                               ),
                             ),
                             onPressed: () {
-                              snackBarWidget(
-                                context,
-                                'تم الحجز بنجاح',
-                                Icons.check,
-                                Colors.white,
-                              );
-                              Navigator.pop(context);
+                              if (date.text.isNotEmpty &&
+                                  textEditingController.text.isNotEmpty) {
+                                snackBarWidget(
+                                  context,
+                                  'تم الحجز بنجاح',
+                                  Icons.check,
+                                  Colors.white,
+                                );
+                                Navigator.pop(context);
+                              } else {
+                                snackBarWidget(
+                                  context,
+                                  'قم بتعبئة جميع الخانات',
+                                  Icons.check,
+                                  Colors.white,
+                                );
+                              }
                             },
                             child: Center(
                               child: Text(

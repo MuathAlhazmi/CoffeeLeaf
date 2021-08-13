@@ -2,6 +2,7 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:restrauntapp/constants/constants.dart';
+import 'package:sizer/sizer.dart';
 
 class InfoPage extends StatelessWidget {
   final List<String> content;
@@ -74,20 +75,23 @@ class InfoPage extends StatelessWidget {
                     borderRadius: BorderRadius.circular(20),
                     child: CachedNetworkImage(
                       imageUrl: image,
-                      height: MediaQuery.of(context).size.height * .2,
+                      height: MediaQuery.of(context).size.height * .3,
                       width: double.infinity,
                       fit: BoxFit.cover,
                     ),
                   ),
                 ),
                 Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    Expanded(
+                    Flexible(
                       child: FittedBox(
                         child: Text(
                           title,
                           style: TextStyle(
-                              color: mainColor, fontWeight: FontWeight.bold),
+                              color: mainColor,
+                              fontWeight: FontWeight.bold,
+                              fontSize: 17.sp),
                         ),
                       ),
                     ),
@@ -99,6 +103,7 @@ class InfoPage extends StatelessWidget {
                     child: Text(
                       sub,
                       style: TextStyle(
+                        fontSize: 12.sp,
                         color: mainColor,
                       ),
                     ),
@@ -118,20 +123,20 @@ class InfoPage extends StatelessWidget {
                     children: [
                       Row(
                         children: [
-                          Expanded(
-                            child: FittedBox(
-                              child: Text(
-                                content.first,
-                                style: TextStyle(
-                                    color: mainColor,
-                                    fontWeight: FontWeight.bold),
-                              ),
+                          FittedBox(
+                            child: Text(
+                              content.first,
+                              style: TextStyle(
+                                  fontSize: 12.sp,
+                                  color: mainColor,
+                                  fontWeight: FontWeight.bold),
                             ),
                           ),
                           Expanded(
                             child: Icon(
                               iconDataList.first,
                               color: mainColor,
+                              size: 12.sp,
                             ),
                           ),
                           Expanded(
@@ -144,6 +149,7 @@ class InfoPage extends StatelessWidget {
                       Text(
                         contentTitle.first,
                         style: TextStyle(
+                          fontSize: 12.sp,
                           color: mainColor,
                         ),
                       ),
@@ -166,20 +172,19 @@ class InfoPage extends StatelessWidget {
                         Row(
                           mainAxisAlignment: MainAxisAlignment.center,
                           children: [
-                            Expanded(
-                              child: FittedBox(
-                                child: Text(
-                                  content[1],
-                                  style: TextStyle(
-                                      color: mainColor,
-                                      fontSize: 20,
-                                      fontWeight: FontWeight.bold),
-                                ),
+                            FittedBox(
+                              child: Text(
+                                content[1],
+                                style: TextStyle(
+                                    color: mainColor,
+                                    fontSize: 12.sp,
+                                    fontWeight: FontWeight.bold),
                               ),
                             ),
                             Expanded(
                               child: Icon(
                                 iconDataList[1],
+                                size: 12.sp,
                                 color: mainColor,
                               ),
                             ),
@@ -193,6 +198,7 @@ class InfoPage extends StatelessWidget {
                         Text(
                           contentTitle[1],
                           style: TextStyle(
+                            fontSize: 12.sp,
                             color: mainColor,
                           ),
                         ),
@@ -214,21 +220,20 @@ class InfoPage extends StatelessWidget {
                     children: [
                       Row(
                         children: [
-                          Expanded(
-                            child: FittedBox(
-                              child: Text(
-                                content[2],
-                                style: TextStyle(
-                                    color: mainColor,
-                                    fontSize: 20,
-                                    fontWeight: FontWeight.bold),
-                              ),
+                          FittedBox(
+                            child: Text(
+                              content[2],
+                              style: TextStyle(
+                                  color: mainColor,
+                                  fontSize: 12.sp,
+                                  fontWeight: FontWeight.bold),
                             ),
                           ),
                           Expanded(
                             child: Icon(
                               iconDataList[2],
                               color: mainColor,
+                              size: 12.sp,
                             ),
                           ),
                           Expanded(
@@ -241,6 +246,7 @@ class InfoPage extends StatelessWidget {
                       Text(
                         contentTitle[2],
                         style: TextStyle(
+                          fontSize: 12.sp,
                           color: mainColor,
                         ),
                       ),

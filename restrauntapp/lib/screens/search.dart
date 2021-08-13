@@ -14,6 +14,7 @@ class _SearchPageState extends State<SearchPage> {
   final search = TextEditingController();
   final search1 = TextEditingController();
   final search2 = TextEditingController();
+  final search3 = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
@@ -21,7 +22,7 @@ class _SearchPageState extends State<SearchPage> {
       color: Colors.white,
       padding: EdgeInsets.symmetric(horizontal: 20, vertical: 10),
       child: DefaultTabController(
-        length: 3,
+        length: 4,
         child: Column(children: <Widget>[
           TabBar(
             enableFeedback: true,
@@ -29,12 +30,20 @@ class _SearchPageState extends State<SearchPage> {
             indicator: CircleTabIndicator(color: mainColor, radius: 4),
             isScrollable: true,
             indicatorColor: mainColor,
-            unselectedLabelStyle:
-                TextStyle(color: Colors.black, fontFamily: 'Cairo'),
-            labelStyle: TextStyle(color: mainColor, fontFamily: 'Cairo'),
+            unselectedLabelStyle: TextStyle(
+                color: Colors.black,
+                fontFamily: 'Cairo',
+                fontWeight: FontWeight.bold),
+            labelStyle: TextStyle(
+                color: mainColor,
+                fontFamily: 'Cairo',
+                fontWeight: FontWeight.bold),
             labelColor: mainColor,
             unselectedLabelColor: mainColor.withOpacity(.4),
             tabs: [
+              Tab(
+                text: "الكل",
+              ),
               Tab(
                 text: "القهوة بالحليب",
               ),
@@ -52,17 +61,22 @@ class _SearchPageState extends State<SearchPage> {
           Expanded(
               child: TabBarView(
             children: [
-              SearchWidget(search: search, enabled: widget.enabled, items: [
+              SearchWidget(
+                  search: search,
+                  enabled: widget.enabled,
+                  items: items,
+                  searchResult: []),
+              SearchWidget(search: search1, enabled: widget.enabled, items: [
                 items[1],
                 items[2],
                 items[3],
                 items[4],
               ], searchResult: []),
-              SearchWidget(search: search1, enabled: widget.enabled, items: [
+              SearchWidget(search: search2, enabled: widget.enabled, items: [
                 items[5],
                 items[0],
               ], searchResult: []),
-              SearchWidget(search: search2, enabled: widget.enabled, items: [
+              SearchWidget(search: search3, enabled: widget.enabled, items: [
                 items[6],
                 items[7],
               ], searchResult: []),
