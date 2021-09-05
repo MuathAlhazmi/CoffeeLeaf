@@ -22,8 +22,9 @@ import 'package:restrauntapp/screens/settings.dart';
 import 'package:shimmer/shimmer.dart';
 import 'package:sizer/sizer.dart';
 
-void main() {
+void main() async {
   WidgetsFlutterBinding.ensureInitialized();
+  await Firebase.initializeApp();
 
   SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp])
       .then((_) {
@@ -37,55 +38,46 @@ class MyApp extends StatefulWidget {
 }
 
 class _MyAppState extends State<MyApp> {
-  final Future<FirebaseApp> _initialization = Firebase.initializeApp();
-
   @override
   Widget build(BuildContext context) {
     return Sizer(builder: (context, orientation, deviceType) {
       return MaterialApp(
-          debugShowCheckedModeBanner: false,
-          localizationsDelegates: [
-            GlobalMaterialLocalizations.delegate,
-            GlobalWidgetsLocalizations.delegate,
-            GlobalCupertinoLocalizations.delegate,
-          ],
-          supportedLocales: [
-            const Locale('ar'),
-          ],
-          theme: ThemeData(
-            primarySwatch: colorCustom,
-            fontFamily: 'Cairo',
+        debugShowCheckedModeBanner: false,
+        localizationsDelegates: [
+          GlobalMaterialLocalizations.delegate,
+          GlobalWidgetsLocalizations.delegate,
+          GlobalCupertinoLocalizations.delegate,
+        ],
+        supportedLocales: [
+          const Locale('ar'),
+        ],
+        theme: ThemeData(
+          primarySwatch: colorCustom,
+          fontFamily: 'Cairo',
+        ),
+        home: AnimatedSplashScreen(
+          curve: Curves.easeInOut,
+          animationDuration: Duration(seconds: 2),
+          duration: 3000,
+          splash: Material(
+            color: Colors.transparent,
+            elevation: 20,
+            shadowColor: mainColor,
+            borderRadius: BorderRadius.circular(20),
+            child: ClipRRect(
+              borderRadius: BorderRadius.circular(10),
+              child: Image.asset(
+                'assets/images/Untitled design (2).png',
+              ),
+            ),
           ),
-          home: FutureBuilder(
-              future: _initialization,
-              builder: (context, snapshot) {
-                if (snapshot.hasError) {}
-                if (snapshot.connectionState == ConnectionState.done) {
-                  return AnimatedSplashScreen(
-                    curve: Curves.easeInOut,
-                    animationDuration: Duration(seconds: 2),
-                    duration: 3000,
-                    splash: Material(
-                      color: Colors.transparent,
-                      elevation: 20,
-                      shadowColor: mainColor,
-                      borderRadius: BorderRadius.circular(20),
-                      child: ClipRRect(
-                        borderRadius: BorderRadius.circular(10),
-                        child: Image.asset(
-                          'assets/images/Untitled design (2).png',
-                        ),
-                      ),
-                    ),
-                    nextScreen: LandingPage(),
-                    splashTransition: SplashTransition.slideTransition,
-                    backgroundColor: itemColor,
-                    pageTransitionType: PageTransitionType.rightToLeft,
-                    centered: true,
-                  );
-                }
-                return Center(child: CupertinoActivityIndicator());
-              }));
+          nextScreen: LandingPage(),
+          splashTransition: SplashTransition.slideTransition,
+          backgroundColor: itemColor,
+          pageTransitionType: PageTransitionType.leftToRight,
+          centered: true,
+        ),
+      );
     });
   }
 }

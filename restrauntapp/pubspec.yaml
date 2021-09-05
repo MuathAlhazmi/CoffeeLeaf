@@ -30,6 +30,7 @@ dependencies:
   pinput: ^1.2.0
   carousel_slider: ^4.0.0
   phone_number: ^0.11.0+1
+  google_sign_in: ^5.0.7
   flash: ^2.0.1
   firebase_auth: ^3.0.1
   sizer: ^2.0.13
@@ -45,6 +46,7 @@ dependencies:
   firebase_core: ^1.4.0
   pull_to_refresh: ^2.0.0
   animated_splash_screen: ^1.1.0
+  font_awesome_flutter: ^9.1.0
   like_button: ^2.0.2
   argon_buttons_flutter: ^1.1.0
   animate_icons: ^2.0.0

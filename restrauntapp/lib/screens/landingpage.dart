@@ -1,5 +1,3 @@
-import 'dart:io';
-
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_storage/firebase_storage.dart';
@@ -19,17 +17,13 @@ class LandingPage extends StatefulWidget {
 
 class _LandingPageState extends State<LandingPage> {
   @override
-  void initState() {
+  Widget build(BuildContext context) {
     if (widget.signingout ?? false) {
       FirebaseAuth.instance.signOut();
       snackBarWidget(
           context, 'تم تسجيل الخروج بنجاج', Icons.check, Colors.white);
     }
-    super.initState();
-  }
 
-  @override
-  Widget build(BuildContext context) {
     return Scaffold(
         body: Container(
       color: Colors.white,
@@ -112,47 +106,29 @@ class _LandingPageState extends State<LandingPage> {
                         ),
                       ),
                       onPressed: () {
-                        if (Platform.isIOS) {
-                          if (FirebaseAuth.instance.currentUser != null) {
-                            print(FirebaseAuth.instance.currentUser!.uid);
-                            Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                  builder: (context) => LoadingListPage(),
-                                ));
-                            // Navigator.push(
-                            //     context,
-                            //     MaterialPageRoute(
-                            //         builder: (context) => DetailScreen(
-                            //             description: items[0].description,
-                            //             price: items[0].price,
-                            //             image: items[0].image,
-                            //             name: items[0].name,
-                            //             quantity: items[0].quantity)));
-                          } else {
-                            Navigator.push(
+                        if (FirebaseAuth.instance.currentUser != null) {
+                          print(FirebaseAuth.instance.currentUser!.uid);
+                          Navigator.push(
                               context,
                               MaterialPageRoute(
-                                builder: (context) => LoginScreenIOS(),
-                              ),
-                            );
-                          }
+                                builder: (context) => LoadingListPage(),
+                              ));
+                          // Navigator.push(
+                          //     context,
+                          //     MaterialPageRoute(
+                          //         builder: (context) => DetailScreen(
+                          //             description: items[0].description,
+                          //             price: items[0].price,
+                          //             image: items[0].image,
+                          //             name: items[0].name,
+                          //             quantity: items[0].quantity)));
                         } else {
-                          if (FirebaseAuth.instance.currentUser != null) {
-                            Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                  builder: (context) => LoadingListPage(),
-                                ));
-                            // Navigator.push(
-                          } else {
-                            Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                builder: (context) => LoginScreen(),
-                              ),
-                            );
-                          }
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) => LoginScreenIOS(),
+                            ),
+                          );
                         }
                       },
                       child: Center(

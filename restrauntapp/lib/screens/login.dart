@@ -93,7 +93,6 @@ class _SignUpState extends State<SignUp> {
                       borderRadius: BorderRadius.circular(10),
                       color: CupertinoColors.tertiarySystemFill,
                     ),
-                    padding: EdgeInsets.symmetric(horizontal: 20),
                     height: 40,
                     child: TextField(
                       controller: widget.email,
@@ -101,7 +100,19 @@ class _SignUpState extends State<SignUp> {
                       cursorColor: mainColor,
                       keyboardType: TextInputType.emailAddress,
                       decoration: InputDecoration(
-                          focusedBorder: InputBorder.none,
+                          contentPadding: EdgeInsets.symmetric(horizontal: 10),
+                          enabledBorder: OutlineInputBorder(
+                              borderRadius: BorderRadius.circular(10),
+                              borderSide: BorderSide(
+                                  color: Colors.transparent, width: 2)),
+                          disabledBorder: OutlineInputBorder(
+                              borderRadius: BorderRadius.circular(10),
+                              borderSide: BorderSide(
+                                  color: Colors.transparent, width: 2)),
+                          focusedBorder: OutlineInputBorder(
+                              borderRadius: BorderRadius.circular(10),
+                              borderSide:
+                                  BorderSide(color: mainColor, width: 2)),
                           focusColor: mainColor,
                           hoverColor: mainColor,
                           border: InputBorder.none,
@@ -125,7 +136,6 @@ class _SignUpState extends State<SignUp> {
                       borderRadius: BorderRadius.circular(10),
                       color: CupertinoColors.tertiarySystemFill,
                     ),
-                    padding: EdgeInsets.symmetric(horizontal: 20),
                     height: 40,
                     child: TextField(
                       controller: widget.password,
@@ -134,7 +144,19 @@ class _SignUpState extends State<SignUp> {
                       style: TextStyle(fontFamily: 'Cairo', fontSize: 12),
                       cursorColor: mainColor,
                       decoration: InputDecoration(
-                          focusedBorder: InputBorder.none,
+                          contentPadding: EdgeInsets.symmetric(horizontal: 10),
+                          enabledBorder: OutlineInputBorder(
+                              borderRadius: BorderRadius.circular(10),
+                              borderSide: BorderSide(
+                                  color: Colors.transparent, width: 2)),
+                          disabledBorder: OutlineInputBorder(
+                              borderRadius: BorderRadius.circular(10),
+                              borderSide: BorderSide(
+                                  color: Colors.transparent, width: 2)),
+                          focusedBorder: OutlineInputBorder(
+                              borderRadius: BorderRadius.circular(10),
+                              borderSide:
+                                  BorderSide(color: mainColor, width: 2)),
                           focusColor: mainColor,
                           hoverColor: mainColor,
                           border: InputBorder.none,
@@ -231,11 +253,16 @@ class _SignUpState extends State<SignUp> {
                     Expanded(
                       child: ElevatedButton(
                         style: ElevatedButton.styleFrom(
-                          primary: itemColor,
-                          onPrimary: mainColor.withOpacity(.1),
+                          elevation: 0,
                           shape: RoundedRectangleBorder(
+                            side: BorderSide(
+                              width: 2,
+                              color: mainColor,
+                            ),
                             borderRadius: BorderRadius.circular(10),
                           ),
+                          primary: itemColor,
+                          onPrimary: Colors.black12,
                         ),
                         onPressed: () {
                           Navigator.push(
@@ -321,7 +348,6 @@ class _LoginScreenIOSState extends State<LoginScreenIOS> {
                         borderRadius: BorderRadius.circular(10),
                         color: CupertinoColors.tertiarySystemFill,
                       ),
-                      padding: EdgeInsets.symmetric(horizontal: 20),
                       height: 40,
                       child: TextField(
                         controller: widget.email,
@@ -329,7 +355,20 @@ class _LoginScreenIOSState extends State<LoginScreenIOS> {
                         cursorColor: mainColor,
                         keyboardType: TextInputType.emailAddress,
                         decoration: InputDecoration(
-                            focusedBorder: InputBorder.none,
+                            contentPadding:
+                                EdgeInsets.symmetric(horizontal: 10),
+                            enabledBorder: OutlineInputBorder(
+                                borderRadius: BorderRadius.circular(10),
+                                borderSide: BorderSide(
+                                    color: Colors.transparent, width: 2)),
+                            disabledBorder: OutlineInputBorder(
+                                borderRadius: BorderRadius.circular(10),
+                                borderSide: BorderSide(
+                                    color: Colors.transparent, width: 2)),
+                            focusedBorder: OutlineInputBorder(
+                                borderRadius: BorderRadius.circular(10),
+                                borderSide:
+                                    BorderSide(color: mainColor, width: 2)),
                             focusColor: mainColor,
                             hoverColor: mainColor,
                             border: InputBorder.none,
@@ -353,7 +392,6 @@ class _LoginScreenIOSState extends State<LoginScreenIOS> {
                         borderRadius: BorderRadius.circular(10),
                         color: CupertinoColors.tertiarySystemFill,
                       ),
-                      padding: EdgeInsets.symmetric(horizontal: 20),
                       height: 40,
                       child: TextField(
                         controller: widget.password,
@@ -362,7 +400,20 @@ class _LoginScreenIOSState extends State<LoginScreenIOS> {
                         style: TextStyle(fontFamily: 'Cairo', fontSize: 12),
                         cursorColor: mainColor,
                         decoration: InputDecoration(
-                            focusedBorder: InputBorder.none,
+                            contentPadding:
+                                EdgeInsets.symmetric(horizontal: 10),
+                            enabledBorder: OutlineInputBorder(
+                                borderRadius: BorderRadius.circular(10),
+                                borderSide: BorderSide(
+                                    color: Colors.transparent, width: 2)),
+                            disabledBorder: OutlineInputBorder(
+                                borderRadius: BorderRadius.circular(10),
+                                borderSide: BorderSide(
+                                    color: Colors.transparent, width: 2)),
+                            focusedBorder: OutlineInputBorder(
+                                borderRadius: BorderRadius.circular(10),
+                                borderSide:
+                                    BorderSide(color: mainColor, width: 2)),
                             focusColor: mainColor,
                             hoverColor: mainColor,
                             border: InputBorder.none,
@@ -444,11 +495,16 @@ class _LoginScreenIOSState extends State<LoginScreenIOS> {
                       Expanded(
                         child: ElevatedButton(
                           style: ElevatedButton.styleFrom(
-                            primary: itemColor,
-                            onPrimary: mainColor.withOpacity(.1),
+                            elevation: 0,
                             shape: RoundedRectangleBorder(
+                              side: BorderSide(
+                                width: 2,
+                                color: mainColor,
+                              ),
                               borderRadius: BorderRadius.circular(10),
                             ),
+                            primary: itemColor,
+                            onPrimary: Colors.black12,
                           ),
                           onPressed: () {
                             Navigator.push(
